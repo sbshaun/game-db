@@ -1,6 +1,11 @@
 <?php
 require_once __DIR__ . '/../../models/types.php';
 
+function test($conn) {
+    header('Content-Type: application/json');
+    echo json_encode(['message' => 'ok']);
+}
+
 function getVideogames($conn) {
     $sql = "SELECT * FROM videogame";
     $result = $conn->query($sql);
