@@ -1,4 +1,7 @@
 <?php
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+
 require_once 'api/utils/database.php';
 require_once 'api/controllers/videogame.php';
 

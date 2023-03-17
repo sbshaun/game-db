@@ -1,7 +1,8 @@
 <?php
 return [
     'GET' => [
-        '/videogames' => 'getVideogames',
+        '/' => 'test',
+        '/videogames/getVideogames' => 'getVideogames',
         // '/characters' => 'getCharacters',
         // '/developers' => 'getDevelopers',
     ],
