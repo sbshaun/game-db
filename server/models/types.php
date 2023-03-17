@@ -1,3 +1,6 @@
+<?php 
+
+
 class Role {
     public string $user_role;
     public bool $post_permission;
@@ -98,3 +101,4 @@ class Comment {
     public string $time_created;
     public int $post_id;
 }
+?>

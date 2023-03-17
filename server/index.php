@@ -1,32 +1,21 @@
 <?php
-$servername = "localhost";
-$username = "root";
-$password = "mysqlmysql";
-$dbname = "test_db";
+require_once 'api/utils/database.php';
+require_once 'api/controllers/videogame.php';
 
-// Create connection
-$conn = new mysqli($servername, $username, $password, $dbname);
 
-// Check connection
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+$config = require 'api/config.php';   // load config
+$routes = require 'api/routes.php';   // load routes
+
+$method = $_SERVER['REQUEST_METHOD']; // more about _SERVER: https://www.w3schools.com/php/php_superglobals_server.asp 
+$path = strtok($_SERVER['REQUEST_URI'], '?');
+
+if (isset($routes[$method]) && isset($routes[$method][$path])) {
+    $conn = connectDatabase($config);          // connect to database
+    $requestHandler = $routes[$method][$path]; // get the name of the request handler function 
+    $requestHandler($conn);                    // call handler function and pass db connection
+    $conn->close();
+} else {
+    http_response_code(404);
+    header('Content-Type: application/json');           // header: https://www.w3schools.com/php/func_network_header.asp
+    echo json_encode(['message' => 'Route not found']); // json_encoded: https://www.w3schools.com/php/func_json_encode.asp 
 }
-
-// Set up server to listen on port 4000
-$host = 'localhost:4000';
-
-// Set headers to allow CORS
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, PUT, POST, DELETE');
-header('Access-Control-Allow-Headers: Content-Type, Authorization');
-
-// Check for GET request to '/'
-if ($_SERVER['REQUEST_METHOD'] === 'GET' && $_SERVER['REQUEST_URI'] === '/') {
-    // Send response with "{message: "ok"}"
-    header('Content-Type: application/json');
-    echo '{"message": "ok"}';
-}
-
-// Close connection
-$conn->close();
-?>
