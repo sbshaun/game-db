@@ -4,7 +4,7 @@ import { VideoGame } from '~~/types/types';
 export async function fetchVideogames(): Promise<VideoGame[]> {
 	try {
 		const response = await axios.get(
-			'http://localhost:4000/videogames/getVideogames'
+			'http://localhost:4000/videogame/getAllVideogames'
 		);
 		return response.data.map(parseVideoGame);
 	} catch (error) {
