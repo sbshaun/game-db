@@ -25,8 +25,8 @@
 <style scoped>
 .container {
 	width: 100%;
-	max-height: 100vh;
-	overflow: auto;
+	height: 100%;
+	overflow: hidden;
 }
 
 header {
