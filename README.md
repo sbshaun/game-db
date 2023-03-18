@@ -1,1 +1,1 @@
-## [GameHaven](https://game-haven.onrender.com)
+## [GameHaven](https://gamehaven.onrender.com)
