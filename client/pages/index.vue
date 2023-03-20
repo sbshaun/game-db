@@ -3,14 +3,6 @@
 <template>
 	<div class="container">
 		<header>
-			<img
-				alt="logo"
-				class="logo"
-				src="../assets/logo.png"
-				width="125"
-				height="125"
-			/>
-
 			<div class="wrapper">
 				<Header />
 			</div>
