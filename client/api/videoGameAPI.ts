@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { VideoGame } from '~~/types/types';
 
+const server_port = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
+
 export async function fetchVideogames(): Promise<VideoGame[]> {
 	try {
 		const response = await axios.get(
-			'http://localhost:4000/videogames/getVideogames'
+			`${server_port}/videogame/getAllVideogames`
 		);
 		return response.data.map(parseVideoGame);
 	} catch (error) {

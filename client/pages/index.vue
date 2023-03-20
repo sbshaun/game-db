@@ -3,14 +3,6 @@
 <template>
 	<div class="container">
 		<header>
-			<img
-				alt="logo"
-				class="logo"
-				src="../assets/logo.png"
-				width="125"
-				height="125"
-			/>
-
 			<div class="wrapper">
 				<Header />
 			</div>
@@ -25,8 +17,8 @@
 <style scoped>
 .container {
 	width: 100%;
-	max-height: 100vh;
-	overflow: auto;
+	height: 100%;
+	overflow: hidden;
 }
 
 header {

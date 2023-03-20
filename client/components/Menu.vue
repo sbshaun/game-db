@@ -92,7 +92,8 @@ const selectedGame = ref<VideoGameType | null>(null);
 
 <style scoped>
 .videoGameDropDown {
-	left: 35%;
 	margin-bottom: 30px;
+	width: 100%;
+	max-width: 300px;
 }
 </style>

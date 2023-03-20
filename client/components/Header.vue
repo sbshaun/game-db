@@ -1,52 +1,68 @@
 <script setup lang="ts">
 import { ref } from 'vue';
-import getServerResponse from '../api/test';
 
-const message = ref('');
+const tabs = [
+	{ id: 1, title: 'videogames' },
+	{ id: 2, title: 'franchise' },
+	{ id: 3, title: 'posts' },
+];
 
-async function handleClick() {
-	// delete this in the future
-	const response = await getServerResponse();
-	message.value = response.message;
-}
+const currentTab = ref(1);
 </script>
 
 <template>
-	<div class="greetings">
-		<h1 class="green"><pre>👋 GameHaven: 💬💻 for 🎮 fans!</pre></h1>
-		<h3>
-			hello this is a message to welcome the marker, the only user of our
-			applicaiton.
-		</h3>
-		<div class="test-server">
-			<!-- delete this in the future -->
-			<button @click="handleClick">test server response</button>
-			<p>{{ message }}</p>
+	<div>
+		<div class="header">
+			<nav>
+				<ul>
+					<li
+						v-for="tab in tabs"
+						:key="tab.id"
+						:class="{ active: tab.id === currentTab }"
+						@click="currentTab = tab.id"
+					>
+						{{ tab.title }}
+					</li>
+				</ul>
+			</nav>
+		</div>
+		<div class="content">
+			<div v-if="currentTab === 1">
+				<h1>videogames</h1>
+			</div>
+			<div v-if="currentTab === 2">
+				<h1>franchise</h1>
+			</div>
+			<div v-if="currentTab === 3">
+				<h1>posts</h1>
+			</div>
 		</div>
 	</div>
 </template>
 
 <style scoped>
-.test-server {
-	margin-top: 1rem;
+.header {
+	background-color: #f1f1f1;
+}
+
+nav ul {
 	display: flex;
-	flex-direction: column;
-	align-items: center;
+	justify-content: space-between;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
 }
 
-h1 {
-	overflow: auto;
-	font-weight: 500;
-	font-size: 2.7rem;
-	top: -10px;
+nav li {
+	padding: 12px 24px;
+	cursor: pointer;
 }
 
-h3 {
-	font-size: 1rem;
+nav li.active {
+	background-color: #ddd;
 }
 
-.greetings h1,
-.greetings h3 {
-	text-align: center;
+.content {
+	padding: 24px;
 }
 </style>

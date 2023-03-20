@@ -1,0 +1,33 @@
+{
+	"name": "server",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"engines": {
+		"node": ">= 18 < 19"
+	},
+	"scripts": {
+		"dev": "ts-node src/index.ts",
+		"build": "tsc",
+		"start": "node ./dist/index.js"
+	},
+	"dependencies": {
+		"@types/body-parser": "^1.19.2",
+		"@types/cors": "^2.8.13",
+		"@types/dotenv": "^8.2.0",
+		"body-parser": "^1.20.2",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"mysql2": "^3.2.0"
+	},
+	"devDependencies": {
+		"@tsconfig/node18": "^1.0.1",
+		"@types/express": "^4.17.17",
+		"@types/mysql": "^2.15.21",
+		"@types/node": "^18.15.3",
+		"prettier": "^2.8.4",
+		"ts-node": "^10.9.1",
+		"typescript": "^5.0.2"
+	}
+}

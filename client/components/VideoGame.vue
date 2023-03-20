@@ -57,13 +57,13 @@ export default defineComponent({
 
 <style scoped>
 .videogame-card {
-	margin: 2rem;
 	padding: 1rem;
 	display: flex;
 	flex-direction: row;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	margin-bottom: 16px;
+	flex-wrap: wrap;
 }
 
 .name-synopsis-container {
@@ -73,6 +73,18 @@ export default defineComponent({
 	margin-right: 3rem;
 	flex-basis: 50%;
 	box-sizing: border-box;
+	flex-grow: 1;
+}
+
+@media (max-width: 768px) {
+	.videogame-card {
+		flex-direction: column;
+	}
+
+	.name-synopsis-container {
+		margin-right: 0;
+		flex-basis: auto;
+	}
 }
 
 .name {
