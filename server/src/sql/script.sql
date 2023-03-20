@@ -21,20 +21,20 @@ CREATE TABLE IF NOT EXISTS country
 
 CREATE TABLE IF NOT EXISTS developer
 (
-	developer_id INT,name CHAR(50) UNIQUE NOT NULL,website_link CHAR(50) UNIQUE
+	developer_id INT AUTO_INCREMENT,name CHAR(50) UNIQUE NOT NULL,website_link CHAR(50) UNIQUE
 	,description TEXT,
 	PRIMARY KEY (developer_id)
 );
 
 CREATE TABLE IF NOT EXISTS franchise
 (
-	franchise_id INT,name CHAR(50) UNIQUE NOT NULL,description TEXT,
+	franchise_id INT AUTO_INCREMENT,name CHAR(50) UNIQUE NOT NULL,description TEXT,
 	PRIMARY KEY (franchise_id)
 );
 
 CREATE TABLE IF NOT EXISTS studio
 (
-	developer_id INT,year_established INT,country CHAR(50),
+	developer_id INT AUTO_INCREMENT,year_established INT,country CHAR(50),
 	phone_number CHAR(15),
 	PRIMARY KEY (developer_id),
 	FOREIGN KEY (developer_id) REFERENCES developer(developer_id),
@@ -43,26 +43,26 @@ CREATE TABLE IF NOT EXISTS studio
 
 CREATE TABLE IF NOT EXISTS individualdeveloper
 (
-	developer_id INT,birthdate DATE,
+	developer_id INT AUTO_INCREMENT,birthdate DATE,
 	PRIMARY KEY (developer_id),
 	FOREIGN KEY (developer_id) REFERENCES developer(developer_id)
 );
 
 CREATE TABLE IF NOT EXISTS characters
 (
-	character_id INT,name CHAR(50) NOT NULL,description TEXT,history TEXT,
+	character_id INT AUTO_INCREMENT,name CHAR(50) NOT NULL,description TEXT,history TEXT,
 	PRIMARY KEY (character_id)
 );
 
 CREATE TABLE IF NOT EXISTS voiceactor
 (
-	actor_id INT,name CHAR(50) NOT NULL,biography TEXT,birthdate DATE,
+	actor_id INT AUTO_INCREMENT,name CHAR(50) NOT NULL,biography TEXT,birthdate DATE,
 	PRIMARY KEY (actor_id)
 );
 
 CREATE TABLE IF NOT EXISTS videogame
 (
-	game_id INT,name CHAR(50) UNIQUE NOT NULL,release_date DATE,genre CHAR(50),
+	game_id INT AUTO_INCREMENT,name CHAR(50) UNIQUE NOT NULL,release_date DATE,genre CHAR(50),
 	synopsis TEXT,rating CHAR(4),sales INT,developer_id INT,start_date INT,
 	end_date INT,franchise_id INT,
 	PRIMARY KEY (game_id),
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS videogame
 
 CREATE TABLE IF NOT EXISTS videogamehascharacter
 (
-	game_id INT,character_id INT,actor_id INT,user_role CHAR(20) NOT NULL,
+	game_id INT AUTO_INCREMENT,character_id INT,actor_id INT,user_role CHAR(20) NOT NULL,
 	PRIMARY KEY (game_id, character_id),
 	FOREIGN KEY (game_id) REFERENCES videogame(game_id),
 	FOREIGN KEY (character_id) REFERENCES characters(character_id),
@@ -81,7 +81,7 @@ CREATE TABLE IF NOT EXISTS videogamehascharacter
 
 CREATE TABLE IF NOT EXISTS post
 (
-	post_id INT,title CHAR(50) NOT NULL,body TEXT NOT NULL,views INT NOT NULL,
+	post_id INT AUTO_INCREMENT,title CHAR(50) NOT NULL,body TEXT NOT NULL,views INT NOT NULL,
 	username CHAR(50) NOT NULL,time_created DATETIME NOT NULL,
 	PRIMARY KEY(post_id),
 	FOREIGN KEY(username) REFERENCES users(username) ON UPDATE CASCADE
@@ -89,7 +89,7 @@ CREATE TABLE IF NOT EXISTS post
 
 CREATE TABLE IF NOT EXISTS posttagsvideogame
 (
-	post_id INT,game_id INT,
+	post_id INT AUTO_INCREMENT,game_id INT,
 	PRIMARY KEY(post_id, game_id),
 	FOREIGN KEY(post_id) REFERENCES post(post_id),
 	FOREIGN KEY(game_id) REFERENCES videogame(game_id)
@@ -97,7 +97,7 @@ CREATE TABLE IF NOT EXISTS posttagsvideogame
 
 CREATE TABLE IF NOT EXISTS comment
 (
-	comment_id INT,body TEXT NOT NULL,username CHAR(50) NOT NULL,
+	comment_id INT AUTO_INCREMENT,body TEXT NOT NULL,username CHAR(50) NOT NULL,
 	time_created DATETIME NOT NULL,post_id INT,
 	PRIMARY KEY(comment_id, post_id),
 	FOREIGN KEY(username) REFERENCES users(username) ON UPDATE CASCADE,

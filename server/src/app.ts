@@ -1,10 +1,15 @@
-import express, { Express } from 'express';
-import bodyParser from 'body-parser';
-import videogameRoutes from './routes/videogameRoutes';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import express, { Express } from 'express';
+import videogameRoutes from './routes/videogameRoutes';
+import voiceActorRoutes from './routes/voiceActorRoutes';
 
 const app: Express = express();
-app.use(cors());
+app.use(
+	cors({
+		methods: ['GET', 'POST', 'PUT', 'DELETE'],
+	})
+);
 app.use(bodyParser.json());
 
 // test route, delete later
@@ -14,6 +19,7 @@ app.get('/', (req, res) => {
 
 // dispatch requests to routes
 app.use('/videogame', videogameRoutes);
+app.use('/voiceactor', voiceActorRoutes);
 // ... TODO: more routes
 
 export default app;

@@ -1,61 +1,60 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 
-const tabs = [
-	{ id: 1, title: 'videogames' },
-	{ id: 2, title: 'franchise' },
-	{ id: 3, title: 'posts' },
-];
+const currentTab = ref('videogames');
 
-const currentTab = ref(1);
+const emit = defineEmits(['update-tab']);
+
+const selectTab = (tabName: string) => {
+	currentTab.value = tabName;
+	emit('update-tab', tabName);
+};
 </script>
 
 <template>
-	<div>
-		<div class="header">
-			<nav>
-				<ul>
-					<li
-						v-for="tab in tabs"
-						:key="tab.id"
-						:class="{ active: tab.id === currentTab }"
-						@click="currentTab = tab.id"
-					>
-						{{ tab.title }}
-					</li>
-				</ul>
-			</nav>
-		</div>
-		<div class="content">
-			<div v-if="currentTab === 1">
-				<h1>videogames</h1>
-			</div>
-			<div v-if="currentTab === 2">
-				<h1>franchise</h1>
-			</div>
-			<div v-if="currentTab === 3">
-				<h1>posts</h1>
-			</div>
-		</div>
-	</div>
+	<nav class="topMenu">
+		<select
+			v-model="currentTab"
+			@change="selectTab(($event.target as HTMLSelectElement)?.value ?? '')"
+		>
+			<option value="videogames">Video Game</option>
+			<option value="franchise">Franchise</option>
+			<option value="developer">Developer</option>
+			<option value="studio">Studio</option>
+			<option value="individualdeveloper">Individual Developer</option>
+			<option value="character">Character</option>
+			<option value="voiceactor">Voice Actor</option>
+			<option value="posts">Post</option>
+			<option value="comments">Comment</option>
+			<option value="users">User</option>
+		</select>
+	</nav>
 </template>
 
 <style scoped>
-.header {
-	background-color: #f1f1f1;
+.topMenu {
+	width: 100%;
+	height: 100%;
+	background-color: #eee;
 }
 
-nav ul {
-	display: flex;
-	justify-content: space-between;
-	list-style-type: none;
-	margin: 0;
-	padding: 0;
-}
-
-nav li {
+select {
+	font-size: 1rem;
+	font-weight: bold;
 	padding: 12px 24px;
+	border: none;
+	background-color: transparent;
 	cursor: pointer;
+	margin: 0 auto;
+	display: block;
+}
+
+select option {
+	font-weight: normal;
+}
+
+select:focus {
+	outline: none;
 }
 
 nav li.active {
