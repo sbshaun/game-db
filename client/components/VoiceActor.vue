@@ -95,7 +95,13 @@ async function submitForm() {
 <template>
 	<div class="container">
 		<h1>Voice Actor</h1>
-		<button @click="formVisible = !formVisible" v-if="!formVisible">
+		<button
+			@click="
+				formVisible = !formVisible;
+				formMode = 'add';
+			"
+			v-if="!formVisible"
+		>
 			Add Voice Actor
 		</button>
 		<form @submit.prevent="submitForm" v-if="formVisible">
