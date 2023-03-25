@@ -1,143 +1,174 @@
 CREATE TABLE IF NOT EXISTS roles
 (
-	user_role CHAR(20),post_permission BIT NOT NULL,
-	remove_post_permission BIT NOT NULL,change_roles_permission BIT NOT NULL,
+	user_role CHAR(20),
+    post_permission BIT NOT NULL,
+	remove_post_permission BIT NOT NULL,
+    change_roles_permission BIT NOT NULL,
 	PRIMARY KEY(user_role)
 );
 
 CREATE TABLE IF NOT EXISTS users
 (
-	username CHAR(50),email CHAR(50) UNIQUE NOT NULL,
-	user_password CHAR(50) NOT NULL,user_role CHAR(20) NOT NULL,
+	username CHAR(50),
+    email CHAR(50) UNIQUE NOT NULL,
+	user_password CHAR(50) NOT NULL,
+    user_role CHAR(20) NOT NULL,
 	PRIMARY KEY(username),
 	FOREIGN KEY(user_role) REFERENCES roles(user_role)
 );
 
 CREATE TABLE IF NOT EXISTS country
 (
-	country CHAR(50),country_code CHAR(4) NOT NULL,
+	country CHAR(50),
+    country_code CHAR(4) NOT NULL,
 	PRIMARY KEY (country)
 );
 
 CREATE TABLE IF NOT EXISTS developer
 (
-	developer_id INT AUTO_INCREMENT,name CHAR(50) UNIQUE NOT NULL,website_link CHAR(50) UNIQUE
-	,description TEXT,
-	PRIMARY KEY (developer_id)
+	name CHAR(50),
+    website_link CHAR(50) UNIQUE,
+    description TEXT,
+	PRIMARY KEY (name)
 );
 
 CREATE TABLE IF NOT EXISTS franchise
 (
-	franchise_id INT AUTO_INCREMENT,name CHAR(50) UNIQUE NOT NULL,description TEXT,
-	PRIMARY KEY (franchise_id)
+	name CHAR(50),
+    description TEXT,
+	PRIMARY KEY (name)
 );
 
 CREATE TABLE IF NOT EXISTS studio
 (
-	developer_id INT AUTO_INCREMENT,year_established INT,country CHAR(50),
+	name CHAR(50),
+	year_established INT,
+    country CHAR(50),
 	phone_number CHAR(15),
-	PRIMARY KEY (developer_id),
-	FOREIGN KEY (developer_id) REFERENCES developer(developer_id),
+	PRIMARY KEY (name),
+	FOREIGN KEY (name) REFERENCES developer(name) ON DELETE CASCADE,
 	FOREIGN KEY (country) REFERENCES country(country)
 );
 
 CREATE TABLE IF NOT EXISTS individualdeveloper
 (
-	developer_id INT AUTO_INCREMENT,birthdate DATE,
-	PRIMARY KEY (developer_id),
-	FOREIGN KEY (developer_id) REFERENCES developer(developer_id)
+	name CHAR(50),
+	birthdate DATE,
+	PRIMARY KEY (name),
+	FOREIGN KEY (name) REFERENCES developer(name) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS characters
 (
-	character_id INT AUTO_INCREMENT,name CHAR(50) NOT NULL,description TEXT,history TEXT,
-	PRIMARY KEY (character_id)
+	name CHAR(50),
+    description TEXT,
+    history TEXT,
+	PRIMARY KEY (name)
 );
 
 CREATE TABLE IF NOT EXISTS voiceactor
 (
-	actor_id INT AUTO_INCREMENT,name CHAR(50) NOT NULL,biography TEXT,birthdate DATE,
+	actor_id INT AUTO_INCREMENT,
+	name CHAR(50) NOT NULL,
+    biography TEXT,
+    birthdate DATE,
 	PRIMARY KEY (actor_id)
 );
 
 CREATE TABLE IF NOT EXISTS videogame
 (
-	game_id INT AUTO_INCREMENT,name CHAR(50) UNIQUE NOT NULL,release_date DATE,genre CHAR(50),
-	synopsis TEXT,rating CHAR(4),sales INT,developer_id INT,start_date INT,
-	end_date INT,franchise_id INT,
-	PRIMARY KEY (game_id),
-	FOREIGN KEY (developer_id) REFERENCES developer(developer_id),
-	FOREIGN KEY (franchise_id) REFERENCES franchise(franchise_id)
+	name CHAR(50),
+    release_date DATE,genre CHAR(50),
+	synopsis TEXT,rating CHAR(4),
+    sales INT,
+    developer_name CHAR(50),
+    start_date INT,
+	end_date INT,
+    franchise_name CHAR(50),
+	PRIMARY KEY (name),
+	FOREIGN KEY (developer_name) REFERENCES developer(name),
+	FOREIGN KEY (franchise_name) REFERENCES franchise(name)
 );
 
 CREATE TABLE IF NOT EXISTS videogamehascharacter
 (
-	game_id INT AUTO_INCREMENT,character_id INT,actor_id INT,user_role CHAR(20) NOT NULL,
-	PRIMARY KEY (game_id, character_id),
-	FOREIGN KEY (game_id) REFERENCES videogame(game_id),
-	FOREIGN KEY (character_id) REFERENCES characters(character_id),
+	game_name CHAR(50),
+	character_name CHAR(50),
+	actor_id INT,
+	character_role CHAR(20) NOT NULL,
+	PRIMARY KEY (game_name, character_name),
+	FOREIGN KEY (game_name) REFERENCES videogame(name),
+	FOREIGN KEY (character_name) REFERENCES characters(name),
 	FOREIGN KEY (actor_id) REFERENCES voiceactor(actor_id)
 );
 
 CREATE TABLE IF NOT EXISTS post
 (
-	post_id INT AUTO_INCREMENT,title CHAR(50) NOT NULL,body TEXT NOT NULL,views INT NOT NULL,
-	username CHAR(50) NOT NULL,time_created DATETIME NOT NULL,
+	post_id INT AUTO_INCREMENT,
+	title CHAR(50) NOT NULL,
+    body TEXT NOT NULL,
+    views INT NOT NULL,
+	username CHAR(50) NOT NULL,
+    time_created DATETIME NOT NULL,
 	PRIMARY KEY(post_id),
 	FOREIGN KEY(username) REFERENCES users(username) ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS posttagsvideogame
 (
-	post_id INT AUTO_INCREMENT,game_id INT,
-	PRIMARY KEY(post_id, game_id),
+	post_id INT AUTO_INCREMENT,
+	game_name CHAR(50),
+	PRIMARY KEY(post_id, game_name),
 	FOREIGN KEY(post_id) REFERENCES post(post_id),
-	FOREIGN KEY(game_id) REFERENCES videogame(game_id)
+	FOREIGN KEY(game_name) REFERENCES videogame(name)
 );
 
 CREATE TABLE IF NOT EXISTS comment
 (
-	comment_id INT AUTO_INCREMENT,body TEXT NOT NULL,username CHAR(50) NOT NULL,
-	time_created DATETIME NOT NULL,post_id INT,
+	comment_id INT AUTO_INCREMENT,
+	body TEXT NOT NULL,
+	username CHAR(50) NOT NULL,
+	time_created DATETIME NOT NULL,
+    post_id INT,
 	PRIMARY KEY(comment_id, post_id),
 	FOREIGN KEY(username) REFERENCES users(username) ON UPDATE CASCADE,
 	FOREIGN KEY(post_id) REFERENCES post(post_id) ON DELETE CASCADE
 );
 
 INSERT INTO developer
-            (developer_id,name,website_link,description)
-VALUES      (1,'House House','househou.se',
+            (name,website_link,description)
+VALUES      ('House House','househou.se',
 'House House is an independent video game developer based in Melbourne, Australia.'
 ),
-            (2,'Game Freak','www.gamefreak.co.jp',
+            ('Game Freak','www.gamefreak.co.jp',
 'Game Freak Co., Ltd. is a Japanese video game developer, best known as the primary developer of the mainline Pokémon series of role-playing video games published by Nintendo and The Pokémon Company.'
 ),
-            (3,'Mobius Digital','www.mobiusdigitalgames.com',NULL),
-            (4,'Nintendo','nintendo.com',
+            ('Mobius Digital','www.mobiusdigitalgames.com',NULL),
+            ('Nintendo','nintendo.com',
 'Nintendo Co., Ltd. is a Japanese multinational video game company headquartered in Kyoto. It develops and releases both video games and video game consoles.'
 ),
-            (5,'Phil Fish',NULL,
+            ('Phil Fish',NULL,
 'Phil Fish is a French Canadian former indie game designer best known for his work on the 2012 platform game Fez.'
 ),
-            (6,'Jonathan Blow','http://number-none.com/blow',
+            ('Jonathan Blow','http://number-none.com/blow',
 			'Jonathan Blow is an American video game designer and programmer.')
 ,
-            (7,'Edmund McMillen',NULL,
+            ('Edmund McMillen',NULL,
 'Edmund McMillen is an American video game designer and artist known for his Flash game visual style.'
 ),
-            (8,'Square Enix','square-enix.com',
+            ('Square Enix','square-enix.com',
 'Square Enix Holdings Co., Ltd. is a Japanese multinational holding company, production enterprise and entertainment conglomerate, best known for its Final Fantasy, Dragon Quest, Star Ocean and Kingdom Hearts role-playing video game franchises, among numerous others.'
 ),
-            (9,'Eric Barone',NULL,
+            ('Eric Barone',NULL,
 'Eric Barone, also known by his alias ConcernedApe, is an American video game developer, video game designer, artist, composer, and musician.'
 ),
-            (10,'Lucas Pope','dukope.com',
+            ('Lucas Pope','dukope.com',
 'Lucas Pope is an American video game designer. He is best known for experimental indie games, notably Papers, Please and Return of the Obra Dinn.'
 ),
-            (11,'Rockstar North','rockstarnorth.com',
+            ('Rockstar North','rockstarnorth.com',
 'Rockstar North Limited (formerly DMA Design Limited) is a British video game development company and a studio of Rockstar Games based in Edinburgh.'
 ),
-            (12,'Capcom','www.capcom.com',
+            ('Capcom','www.capcom.com',
 'Capcom Co., Ltd. is a Japanese video game developer and publisher.');
 
 INSERT INTO country
@@ -149,93 +180,93 @@ VALUES      ('United States','1'),
             ('United Kingdom','44');
 
 INSERT INTO studio
-            (developer_id,year_established,country,phone_number)
-VALUES      (1,2014,'Australia',NULL),
-            (2,1989,'Japan','(334) 674-387'),
-            (3,2013,'United States',NULL),
-            (4,1889,'Japan','(800) 255-3700'),
-            (8,2003,'Japan',NULL),
-            (11,1987,'United Kingdom',NULL),
-            (12,1979,'Japan',NULL);
+            (name,year_established,country,phone_number)
+VALUES      ('House House',2014,'Australia',NULL),
+            ('Game Freak',1989,'Japan','(334) 674-387'),
+            ('Mobius Digital',2013,'United States',NULL),
+            ('Nintendo',1889,'Japan','(800) 255-3700'),
+            ('Square Enix',2003,'Japan',NULL),
+            ('Rockstar North',1987,'United Kingdom',NULL),
+            ('Capcom',1979,'Japan',NULL);
 
 INSERT INTO individualdeveloper
-            (developer_id,birthdate)
-VALUES      (5,'1984-11-01'),
-            (6,'1971-01-01'),
-            (7,'1980-03-02'),
-            (9,'1987-12-03'),
-            (10,NULL);
+            (name,birthdate)
+VALUES      ('Phil Fish','1984-11-01'),
+            ('Jonathan Blow','1971-01-01'),
+            ('Edmund McMillen','1980-03-02'),
+            ('Eric Barone','1987-12-03'),
+            ('Lucas Pope',NULL);
 
 INSERT INTO franchise
-            (franchise_id,name,description)
-VALUES      (1,'Pokémon',
+            (name,description)
+VALUES      ('Pokémon',
 'The franchise was created by Satoshi Tajiri in 1996, and is centred around fictional creatures called "Pokémon"'
 ),
-            (2,'Grand Theft Auto',
+            ('Grand Theft Auto',
              'Grand Theft Auto (GTA) is a series of action-adventure games.'),
-            (3,'Super Mario',
+            ('Super Mario',
 'The Super Mario games are set primarily in the fictional Mushroom Kingdom, typically with Mario as the player character.'
 ),
-            (4,'The Legend of Zelda',
+            ('The Legend of Zelda',
 'The series centres on the various incarnations of Link, a courageous young man of the elf-like Hylian race; and Princess Zelda, a magical princess who is the mortal reincarnation of the goddess Hylia'
 ),
-            (5,'Kingdom Hearts',
+            ('Kingdom Hearts',
 'The series centers on the main character, Sora, and his journey and experiences with various Disney and Pixar characters, as well as some from Square Enix properties.'
 );
 
 INSERT INTO videogame
-            (game_id,name,release_date,genre,synopsis,rating,sales,developer_id,
+            (name,release_date,genre,synopsis,rating,sales,developer_name,
             start_date,
-            end_date,franchise_id)
-VALUES      (1,'Untitled Goose Game','2019-09-20','Puzzle',
+            end_date,franchise_name)
+VALUES      ('Untitled Goose Game','2019-09-20','Puzzle',
 'Players control a goose who bothers the inhabitants of an English village.'
-,'E',1000000,1,NULL,2019,NULL),
-(2,'Pokémon Red and Blue','1998-09-28','Role-playing',
+,'E',1000000,'House House',NULL,2019,NULL),
+('Pokémon Red and Blue','1998-09-28','Role-playing',
 'The player controls the protagonist from an overhead perspective and navigates him throughout the fictional region of Kanto in a quest to master Pokémon battling.'
-,'E',31380000,2,1990,1998,1),
-(3,'Outer Wilds','2019-05-28','Action-adventure',
+,'E',31380000,'Game Freak',1990,1998,'Pokémon'),
+('Outer Wilds','2019-05-28','Action-adventure',
 'Named Game of the Year 2019 by Giant Bomb, Polygon, Eurogamer, and The Guardian, Outer Wilds is a critically-acclaimed and award-winning open world mystery about a solar system trapped in an endless time loop.'
-,'E10+',4000000,3,2012,2021,NULL),
-(4,'Super Mario Galaxy','2007-11-01','Platform',
+,'E10+',4000000,'Mobius Digital',2012,2021,NULL),
+('Super Mario Galaxy','2007-11-01','Platform',
 'As Mario, the player embarks on a quest to rescue Princess Peach, save the universe from Bowser, and collect 120 Power Stars, after which the player can play the game as Luigi for a more difficult experience.'
-,'E',12800000,4,2004,2007,3),
-(5,'Fez','2012-04-13','Puzzle-platform',
+,'E',12800000,'Nintendo',2004,2007,'Super Mario'),
+('Fez','2012-04-13','Puzzle-platform',
 'The player-character Gomez receives a fez that reveals his two-dimensional (2D) world to be one of four sides of a three-dimensional (3D) world.'
-,'E',1000000,5,2007,2012,NULL),
-(6,'The Witness','2016-01-16','Puzzle',
+,'E',1000000,'Phil Fish',2007,2012,NULL),
+('The Witness','2016-01-16','Puzzle',
 'The player progresses by solving puzzles, which are based on interactions with grids presented on panels around the island or paths hidden within the environment.'
-,'E',100000,6,2008,2016,NULL),
-(7,'Super Meat Boy','2010-10-20','Platform',
-'The player controls Meat Boy, a red, cube-shaped character, as he attempts to rescue his girlfriend, Bandage Girl, from the game\'s antagonist Dr. Fetus.'
-,'T',1000000,7,2008,2010,NULL),
-(8,'The Legend of Zelda: Breath of the Wild','2017-03-03','Action-adventure',
+,'E',100000,'Jonathan Blow',2008,2016,NULL),
+('Super Meat Boy','2010-10-20','Platform',
+'The player controls Meat Boy, a red, cube-shaped character, as he attempts to rescue his girlfriend, Bandage Girl, from the antagonist Dr. Fetus.'
+,'T',1000000,'Edmund McMillen',2008,2010,NULL),
+('The Legend of Zelda: Breath of the Wild','2017-03-03','Action-adventure',
 'The player controls an amnesiac Link, who awakens from a hundred-year slumber, and attempts to regain his memories, save princess Zelda and prevent the further destruction of Hyrule by Calamity Ganon.'
-,'E10+',29000000,4,NULL,2017,4),
-(9,'Kingdom Hearts III','2019-01-25','Action role-playing',
+,'E10+',29000000,'Nintendo',NULL,2017,'The Legend of Zelda'),
+('Kingdom Hearts III','2019-01-25','Action role-playing',
 'Kingdom Hearts III is the twelfth installment in the Kingdom Hearts series, and serves as a conclusion of the "Dark Seeker Saga" story arc that began with the original game.'
-,'E10+',6700000,8,NULL,2018,5),
-(10,'Stardew Valley','2016-02-26','Simulation',
-'Players take the role of a character who inherits their deceased grandfather\'s dilapidated farm in a place known as Stardew Valley.'
-,'E10+',20000000,9,2011,2021,NULL),
-(11,'Papers, Please','2013-08-08','Puzzle',
-'As an immigration officer, the player must review each immigrant and return citizens\' passports and other supporting paperwork against an ever-growing list of rules using a number of tools and guides.'
-,'M',1800000,10,2010,2014,NULL),
-(12,'Braid','2008-08-06','Puzzle-platform',
+,'E10+',6700000,'Square Enix',NULL,2018,'Kingdom Hearts'),
+('Stardew Valley','2016-02-26','Simulation',
+'Players take the role of a character who inherits a dilapidated farm in a place known as Stardew Valley.'
+,'E10+',20000000,'Eric Barone',2011,2021,NULL),
+('Papers, Please','2013-08-08','Puzzle',
+'As an immigration officer, the player must review each immigrant and return passports and other supporting paperwork against an ever-growing list of rules using a number of tools and guides.'
+,'M',1800000,'Lucas Pope',2010,2014,NULL),
+('Braid','2008-08-06','Puzzle-platform',
 'Braid is a puzzle-platformer, drawn in a painterly style, where you can manipulate the flow of time in strange and unusual ways. From a house in the city, journey to a series of worlds and solve puzzles to rescue an abducted princess.'
-,'E10+',NULL,6,2004,2010,NULL),
-(13,'Grand Theft Auto V','2013-09-17','Action-adventure',
+,'E10+',NULL,'Jonathan Blow',2004,2010,NULL),
+('Grand Theft Auto V','2013-09-17','Action-adventure',
 'Set within the fictional state of San Andreas, based on Southern California, the single-player story follows three protagonists—retired bank robber Michael De Santa, street gangster Franklin Clinton, and drug dealer and gunrunner Trevor Philips—and their attempts to commit heists while under pressure from a corrupt government agency and powerful criminals.'
-,'M',175000000,11,2008,2022,2),
-(14,'Super Mario Bros.','1985-09-13','Platform',
+,'M',175000000,'Rockstar North',2008,2022,'Grand Theft Auto'),
+('Super Mario Bros.','1985-09-13','Platform',
 'Players control Mario, or his brother Luigi in the multiplayer mode, as they traverse the Mushroom Kingdom to rescue Princess Toadstool from King Koopa (later named Bowser).'
-,'E',40240000,4,NULL,1987,3),
-(15,'The Legend of Zelda: The Minish Cap','2004-11-04','Action-adventure',
+,'E',40240000,'Nintendo',NULL,1987,'Super Mario'),
+('The Legend of Zelda: The Minish Cap','2004-11-04','Action-adventure',
 'The Minish Cap continues the story of the Four Sword, a weapon introduced in Four Swords and Four Swords Adventures. The game retains many elements common to previous Zelda games, especially top-down predecessors such as A Link to the Past, and includes new features and mechanics.'
-,'E',NULL,12,NULL,2005,4),
-(16,'Return of the Obra Dinn','2018-10-18','Adventure',
+,'E',NULL,'Capcom',NULL,2005,'The Legend of Zelda'),
+('Return of the Obra Dinn','2018-10-18','Adventure',
 'Set in 1807, the player assumes the role of insurance inspector for the East India Company. The Obra Dinn, a merchant ship missing for five years, has reappeared off the coast of England with no one alive aboard. The player is dispatched to the ghost ship to perform an appraisal, reconstruct the events of the voyage, and determine the fates of all sixty souls aboard, providing a cause of death for those deceased or a probable current location for those presumed living.'
-,'M',NULL,10,NULL,2020,NULL),
-(17,'Kentucky Route Zero','2020-01-28','Point-and-click adventure',
+,'M',NULL,'Lucas Pope',NULL,2020,NULL),
+('Kentucky Route Zero','2020-01-28','Point-and-click adventure',
 'Kentucky Route Zero follows the narrative of a truck driver named Conway and the strange people he meets as he tries to cross the mysterious Route Zero in Kentucky to make a final delivery for the antiques company for which he works.'
 ,'T',NULL,NULL,NULL,NULL,NULL);
 
@@ -258,46 +289,46 @@ VALUES      (1,'Kengo Takanashi',
 ,'1985-02-09');
 
 INSERT INTO characters
-            (character_id,name,description,history)
-VALUES      (1,'Link',
-'Link is the protagonist of Nintendo\'s video game franchise The Legend of Zelda. He was created by Japanese video game designer Shigeru Miyamoto.'
+            (name,description,history)
+VALUES      ('Link',
+'Link is the protagonist of the video game franchise The Legend of Zelda. He was created by Japanese video game designer Shigeru Miyamoto.'
 ,
 'Link is the soul of a legendary hero that throughout history is reincarnated within a seemingly ordinary boy or man when the need arises for a new warrior to defeat the forces of evil.'
 ),
-            (2,'Mario',
+            ('Mario',
 'Mario is the title character of the video game franchise of the same name and the mascot of Japanese video game company Nintendo.'
 ,
 'Mario is depicted as a portly plumber who lives in the fictional land of the Mushroom Kingdom with Luigi, his younger, taller brother.'
 ),
-            (3,'Zelda',
+            ('Zelda',
 'Zelda is a princess and member of the royal family of Hyrule. She is typically depicted with blonde or brown hair and blue eyes and wears a royal dress, tiara and jewellery.'
 ,
 'In many games, Zelda is captured by the antagonist Ganon, necessitating Link to come to her rescue. In several games she is one of the Sages or Champions whose heroism is essential to defeating Ganon; in others, like Ocarina of Time and The Wind Waker, she adopts alternative personas to take a more active role in the story. In Skyward Sword, she is established as the mortal reincarnation of the goddess Hylia, which gives her incarnations a range of magical powers.'
 ),
-            (4,'Sora',
+            ('Sora',
 'Sora is the main protagonist and main playable character in most of the Kingdom Hearts series.'
 ,
 'He is a Keyblade wielder from the Destiny Islands where he, along with his childhood friends Riku and Kairi, dreamed of venturing away to find out what lies beyond their home.'
 ),
-            (5,'Red',
+            ('Red',
 'Red is the canon name of the protagonist of the Generation I games and is a Pokémon Trainer from Pallet Town, Kanto.'
 ,
 'Red is known throughout the Pokémon world as the Champion from Pallet Town, as well as a living legend for his defeat of Team Rocket in Kanto during his quest.'
 ),
-            (6,'Riku',
+            ('Riku',
 'Riku is a calm, cool, collected teenager who is not afraid to push the boundaries. He is tall and muscular with pale skin, bright blue-green eyes and silver hair.'
 ,
 'Riku is introduced as a teenager who wishes to visit other worlds with his friends Sora and Kairi. After a way to other worlds is opened, Riku meets the evil fairy Maleficent who pits him against Sora, leading to Riku falling to darkness and ultimately being possessed by Ansem, Seeker of Darkness. Riku is freed thanks to Sora and returns as a protagonist in following games.'
 );
 
 INSERT INTO videogamehascharacter
-            (game_id,character_id,actor_id,user_role)
-VALUES      (4,2,2,'Playable'),
-            (8,1,1,'Playable'),
-            (8,3,3,'Supporting'),
-            (9,4,4,'Playable'),
-            (2,5,NULL,'Playable'),
-            (9,6,5,'Playable');
+            (game_name,character_name,actor_id,character_role)
+VALUES      ('Super Mario Galaxy','Mario',2,'Playable'),
+            ('The Legend of Zelda: Breath of the Wild','Link',1,'Playable'),
+            ('The Legend of Zelda: Breath of the Wild','Zelda',3,'Supporting'),
+            ('Kingdom Hearts III','Sora',4,'Playable'),
+            ('Pokémon Red and Blue','Red',NULL,'Playable'),
+            ('Kingdom Hearts III','Riku',5,'Playable');
 
 INSERT INTO roles
             (user_role,post_permission,remove_post_permission,
@@ -335,12 +366,12 @@ VALUES      (1,'Review of the game',
 ,8,'andy613','2023-02-25 19:59:12');
 
 INSERT INTO posttagsvideogame
-            (post_id,game_id)
-VALUES      (1,2),
-            (2,1),
-            (3,3),
-            (4,5),
-            (4,4);
+            (post_id,game_name)
+VALUES      (1,'Pokémon Red and Blue'),
+            (2,'Untitled Goose Game'),
+            (3,'Outer Wilds'),
+            (4,'Fez'),
+            (4,'Super Mario Galaxy');
 
 INSERT INTO comment
             (comment_id,body,username,time_created,post_id)

@@ -18,32 +18,29 @@ export type Country = {
 };
 
 export type Developer = {
-	developer_id: number;
 	name: string;
 	website_link: string | null;
 	description: string | null;
 };
 
 export type Franchise = {
-	franchise_id: number;
 	name: string;
 	description: string | null;
 };
 
 export type Studio = {
-	developer_id: number;
+	name: string;
 	year_established: number | null;
 	country: string | null;
 	phone_number: string | null;
 };
 
 export type IndividualDeveloper = {
-	developer_id: number;
+	name: string;
 	birthdate: string | null;
 };
 
 export type Character = {
-	character_id: number;
 	name: string;
 	description: string | null;
 	history: string | null;
@@ -57,24 +54,23 @@ export type VoiceActor = {
 };
 
 export type VideoGame = {
-	game_id: number;
 	name: string;
 	release_date: string | null;
 	genre: string | null;
 	synopsis: string | null;
 	rating: string | null;
 	sales: number | null;
-	developer_id: number | null;
+	developer_name: string | null;
 	start_date: number | null;
 	end_date: number | null;
-	franchise_id: number | null;
+	franchise_name: string | null;
 };
 
 export type VideoGameHasCharacter = {
-	game_id: number;
-	character_id: number;
+	game_name: string;
+	character_name: string;
 	actor_id: number | null;
-	user_role: string;
+	character_role: string;
 };
 
 export type Post = {
@@ -88,7 +84,7 @@ export type Post = {
 
 export type PostTagsVideoGame = {
 	post_id: number;
-	game_id: number;
+	game_name: string;
 };
 
 export type Comment = {
