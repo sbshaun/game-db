@@ -286,7 +286,16 @@ VALUES      (1,'Kengo Takanashi',
 '1988-04-10'),
 (5,'David Gallagher',
 'David Lee Gallagher is an American actor and former model.'
-,'1985-02-09');
+,'1985-02-09'),
+(6, 'Fujiko Takimoto', 'Fujiko Takimoto is a Japanese voice actress from Osaka Prefecture, Japan.', '1967-11-06'),
+(7, 'Hikari Tachibana', 'Hikari Tachibana is a Japanese voice actress.', '1973-09-18'),
+(8, 'Frank Welker', 'Franklin Wendell Welker is an American voice actor.
+He began his career in the 1960s, and holds over 860 film, television, and video game credits as of 2022, making him one of the most prolific voice actors of all time.',
+'1946-03-12'),
+(9, 'Harvey Atkin',
+'Elliot Harvey Atkin was a Canadian actor best known for his roles as Morty Melnick in Meatballs, Sergeant Ronald
+Coleman in Cagney & Lacey, and for voicing King Koopa in The Super Mario Bros.', '1942-12-18'),
+(10, 'Tsuguo Mogami', 'Tsuguo Mogami is a Japanese voice actor from Saitama Prefecture, Japan.', '1980-1-18');
 
 INSERT INTO characters
             (name,description,history)
@@ -319,13 +328,34 @@ VALUES      ('Link',
 'Riku is a calm, cool, collected teenager who is not afraid to push the boundaries. He is tall and muscular with pale skin, bright blue-green eyes and silver hair.'
 ,
 'Riku is introduced as a teenager who wishes to visit other worlds with his friends Sora and Kairi. After a way to other worlds is opened, Riku meets the evil fairy Maleficent who pits him against Sora, leading to Riku falling to darkness and ultimately being possessed by Ansem, Seeker of Darkness. Riku is freed thanks to Sora and returns as a protagonist in following games.'
-);
+),
+            ('Luigi', 'Luigi is Mario''s younger twin brother and the secondary protagonist of the Mario franchise.',
+'Throughout his life, he has lived in Mario''s shadow, developing both cowardly and heroic tendencies. Despite this, Luigi has helped and fought alongside his brother on many occasions.'),
+            ('Yoshi',
+'Yoshi is a dinosaur-like character that acts as an ally of Mario and Luigi', 'Among members of the Yoshi species hailing from Yoshi''s Island, any Yoshi may be identified as the "Yoshi" character, and as such, not all iterations of the character are necessarily the same one.'),
+            ('Bowser',
+'Bowser, or King Koopa, is a fictional character, the main antagonist in Nintendo''s Mario franchise.',
+'He is a large, powerful, fire-breathing Koopa who leads the Koopa Troop,
+an evil kingdom of turtle-like creatures, and has been the arch-nemesis of Mario since his debut in Super Mario Bros.
+He has repeatedly kidnapped or attempted to kidnap Princess Peach with the ultimate goal of defeating Mario and taking
+over the Mushroom Kingdom.'),
+            ('Calamity Ganon', 'A recurring major antagonist in The Legend of Zelda series.',
+'Calamity Ganon is known as a primal evil that has appeared throughout Hyrule''s history.');
 
 INSERT INTO videogamehascharacter
             (game_name,character_name,actor_id,character_role)
 VALUES      ('Super Mario Galaxy','Mario',2,'Playable'),
+            ('Super Mario Bros.', 'Mario', 2, 'Playable'),
+            ('Super Mario Bros.', 'Luigi', 2, 'Playable'),
+            ('Super Mario Galaxy', 'Luigi', 2, 'Playable'),
+            ('Super Mario Bros.', 'Yoshi', 8, 'Supporting'),
+            ('Super Mario Bros.', 'Bowser', 9, 'Antagonist'),
+            ('Super Mario Galaxy', 'Bowser', 9, 'Antagonist'),
             ('The Legend of Zelda: Breath of the Wild','Link',1,'Playable'),
             ('The Legend of Zelda: Breath of the Wild','Zelda',3,'Supporting'),
+            ('The Legend of Zelda: Breath of the Wild', 'Calamity Ganon', 10, 'Antagonist'),
+            ('The Legend of Zelda: The Minish Cap', 'Link', 6, 'Playable'),
+            ('The Legend of Zelda: The Minish Cap', 'Zelda', 7, 'Playable'),
             ('Kingdom Hearts III','Sora',4,'Playable'),
             ('Pokémon Red and Blue','Red',NULL,'Playable'),
             ('Kingdom Hearts III','Riku',5,'Playable');
