@@ -94,3 +94,8 @@ export type Comment = {
 	time_created: string;
 	post_id: number;
 };
+
+export type AggregationGroup = {
+	category: string,
+	result: number
+}
