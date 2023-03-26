@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import * as controller from "../controllers/FranchiseController";
+import {getAllFranchises, getCharactersFromFranchise} from "../controllers/FranchiseController";
 
 const router = Router();
 
 
-router.post("/franchises", controller.getAllFranchises);
-router.get("/franchises/:franchiseName/characters", controller.getCharactersFromFranchise)
+router.post("/franchises", getAllFranchises);
+router.get("/franchises/:franchiseName/characters", getCharactersFromFranchise)
 
 export default router;

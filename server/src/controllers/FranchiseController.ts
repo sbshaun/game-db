@@ -15,8 +15,7 @@ export const getAllFranchises = (req: Request, res: Response) => {
 }
 
 export const getCharactersFromFranchise = (req: Request, res: Response) => {
-    let params = req.params;
-    let franchiseName = params["franchiseName"];
+    let franchiseName: string = req.params.franchiseName;
     return connection.query(
         `SELECT * FROM characters C WHERE NOT EXISTS(
                 SELECT * FROM videogame V WHERE franchise_name = '${franchiseName}' AND NOT EXISTS (
