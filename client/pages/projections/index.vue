@@ -95,9 +95,9 @@ export default {
 					{{ table }}
 				</option>
 			</select>
-
-			<div v-if="selectedTable" class="column-select">
-				<h2>Select attributes:</h2>
+		</div>
+		<div v-if="selectedTable" class="column-select">
+			<div class="attributes-wrapper">
 				<div v-for="column in columns" :key="column">
 					<input
 						type="checkbox"
@@ -107,7 +107,11 @@ export default {
 					/>
 					<label :for="column">{{ column }}</label>
 				</div>
-				<button @click="fetchData" :disabled="loading">
+				<button
+					@click="fetchData"
+					:disabled="loading"
+					style="border-color: hsla(160, 100%, 37%, 0.5)"
+				>
 					{{ loading ? 'Loading...' : 'Query' }}
 				</button>
 			</div>
@@ -149,17 +153,63 @@ export default {
 	left: 0;
 }
 
+.selectionGroup label {
+	margin-right: 0.5rem;
+}
+
 .tableContainer {
 	margin: 10px;
 }
 
 .column-select {
-	margin: 1rem 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-top: 1rem;
+	margin-bottom: 1rem;
+	max-width: 70vw;
+}
+
+.attributes-wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+	margin-bottom: 1rem;
+}
+
+.column-select label {
+	display: inline-flex;
+	align-items: center;
+	background-color: #f2f2f2;
+	border: 1px solid #ddd;
+	border-radius: 4px;
+	padding: 5px 10px;
+	font-size: 14px;
+	cursor: pointer;
+	transition: background-color 0.2s;
+}
+
+.column-select input[type='checkbox'] {
+	margin-right: 5px;
+}
+
+.column-select label:hover {
+	background-color: #ddd;
+}
+
+.column-select input[type='checkbox']:checked + label {
+	background-color: #ddd;
+	color: #fff;
+}
+
+.column-select input[type='checkbox']:checked + label:hover {
+	background-color: #ddd;
 }
 
 table {
 	font-size: x-small;
 	width: 100%;
+	border-collapse: collapse;
 }
 
 thead th {
