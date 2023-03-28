@@ -148,7 +148,7 @@ function unselectAllColumns() {
 			</button>
 		</div>
 		<form @submit.prevent="submitForm" v-if="formVisible">
-			<div>
+			<div class="inputField">
 				<label for="name">Name:</label>
 				<input
 					type="text"
@@ -157,7 +157,7 @@ function unselectAllColumns() {
 					required
 				/>
 			</div>
-			<div>
+			<div class="inputField">
 				<label for="release_date">Release Date:</label>
 				<input
 					type="date"
@@ -165,23 +165,23 @@ function unselectAllColumns() {
 					v-model="selectedVideoGame.release_date"
 				/>
 			</div>
-			<div>
+			<div class="inputField">
 				<label for="genre">Genre:</label>
 				<input type="text" id="genre" v-model="selectedVideoGame.genre" />
 			</div>
-			<div>
+			<div class="inputField">
 				<label for="synopsis">Synopsis:</label>
 				<textarea id="synopsis" v-model="selectedVideoGame.synopsis"></textarea>
 			</div>
-			<div>
+			<div class="inputField">
 				<label for="rating">Rating:</label>
 				<input type="text" id="rating" v-model="selectedVideoGame.rating" />
 			</div>
-			<div>
+			<div class="inputField">
 				<label for="sales">Sales:</label>
 				<input type="number" id="sales" v-model="selectedVideoGame.sales" />
 			</div>
-			<div>
+			<div class="inputField">
 				<label for="developer_name">Developer Name:</label>
 				<input
 					type="text"
@@ -189,7 +189,7 @@ function unselectAllColumns() {
 					v-model="selectedVideoGame.developer_name"
 				/>
 			</div>
-			<div>
+			<div class="inputField">
 				<label for="franchise_name">Franchise Name:</label>
 				<input
 					type="text"
@@ -259,6 +259,16 @@ function unselectAllColumns() {
 	box-sizing: border-box;
 }
 
+.inputField {
+	display: flex;
+	flex-direction: row;
+	margin: 0.3rem;
+}
+
+.inputField label {
+	width: 10rem;
+}
+
 .fetch-row {
 	width: 100%;
 	display: flex;
@@ -293,7 +303,6 @@ h1 {
 form {
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
 }
 
 input,
@@ -314,7 +323,13 @@ button {
 	border: none;
 	border-radius: 4px;
 	transition: background-color 0.3s;
+	margin-bottom: 0.5rem;
 }
+
+button:last-child {
+	margin-bottom: 0;
+}
+
 button:hover {
 	background-color: #0056b3;
 }
@@ -329,24 +344,23 @@ button:hover {
 }
 
 table {
+	margin-top: 10px;
+	font-size: x-small;
 	width: 100%;
-	margin-left: -10%;
 	border-collapse: collapse;
 }
 
-th,
-td {
-	padding: 1rem;
+thead th {
+	background-color: #f2f2f2;
+	border: 1px solid #dddddd;
 	text-align: left;
-	border-bottom: 1px solid #ccc;
-	word-wrap: break-word;
-	max-height: 150px;
-	overflow-y: auto;
+	padding: 8px;
 }
 
-th {
-	font-weight: bold;
-	color: #2c3e50;
+tbody td {
+	border: 0.5px solid #dddddd;
+	text-align: left;
+	padding: 8px;
 }
 
 @media (max-width: 1024px) {

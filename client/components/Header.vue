@@ -9,9 +9,6 @@ const selectTab = (tabName: string) => {
 <template>
 	<nav class="topMenu">
 		<ul>
-			<nuxt-link to="/projections" @click="selectTab('projections')">
-				<li :class="{ active: currentTab === 'projections' }">Projections</li>
-			</nuxt-link>
 			<nuxt-link to="/" @click="selectTab('videogames')">
 				<li :class="{ active: currentTab === 'videogames' }">Video Games</li>
 			</nuxt-link>
@@ -26,6 +23,9 @@ const selectTab = (tabName: string) => {
 			</nuxt-link>
 			<nuxt-link to="/stats" @click="selectTab('stats')">
 				<li :class="{ active: currentTab === 'stats' }">Stats</li>
+			</nuxt-link>
+			<nuxt-link to="/projections" @click="selectTab('projections')">
+				<li :class="{ active: currentTab === 'projections' }">Projections</li>
 			</nuxt-link>
 		</ul>
 	</nav>
