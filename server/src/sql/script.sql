@@ -1,3 +1,19 @@
+DROP TABLE comment;
+DROP TABLE posttagsvideogame;
+DROP TABLE post;
+DROP TABLE videogamehascharacter;
+DROP TABLE videogame;
+DROP TABLE voiceactor;
+DROP TABLE characters;
+DROP TABLE individualdeveloper;
+DROP TABLE studio;
+DROP TABLE franchise;
+DROP TABLE developer;
+DROP TABLE country;
+DROP TABLE users;
+DROP TABLE roles;
+
+
 CREATE TABLE IF NOT EXISTS roles
 (
 	user_role CHAR(20),
@@ -86,7 +102,7 @@ CREATE TABLE IF NOT EXISTS videogame
 	end_date INT,
     franchise_name CHAR(50),
 	PRIMARY KEY (name),
-	FOREIGN KEY (developer_name) REFERENCES developer(name),
+	FOREIGN KEY (developer_name) REFERENCES developer(name) ON DELETE SET NULL,
 	FOREIGN KEY (franchise_name) REFERENCES franchise(name)
 );
 
