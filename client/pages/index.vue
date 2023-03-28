@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
-import { VideoGame } from '~~/types/types';
+import { ref, reactive } from 'vue';
+import { VideoGame } from '../types/types';
 import {
 	insertVideoGame,
 	updateVideoGameByName,

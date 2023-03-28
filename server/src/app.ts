@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import express, { Express } from 'express';
 import videogameRoutes from './routes/videogameRoutes';
 import voiceActorRoutes from './routes/voiceActorRoutes';
+import projectionRoutes from './routes/projectionRoutes';
 
 const app: Express = express();
 app.use(
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 });
 
 // dispatch requests to routes
+app.use('/projections', projectionRoutes);
 app.use('/videogame', videogameRoutes);
 app.use('/voiceactor', voiceActorRoutes);
 // ... TODO: more routes
