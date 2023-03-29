@@ -1,3 +1,19 @@
+DROP TABLE IF EXISTS comment;
+DROP TABLE IF EXISTS posttagsvideogame;
+DROP TABLE IF EXISTS post;
+DROP TABLE IF EXISTS videogamehascharacter;
+DROP TABLE IF EXISTS videogame;
+DROP TABLE IF EXISTS voiceactor;
+DROP TABLE IF EXISTS characters;
+DROP TABLE IF EXISTS individualdeveloper;
+DROP TABLE IF EXISTS studio;
+DROP TABLE IF EXISTS franchise;
+DROP TABLE IF EXISTS developer;
+DROP TABLE IF EXISTS country;
+DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS roles;
+
+
 CREATE TABLE IF NOT EXISTS roles
 (
 	user_role CHAR(20),
@@ -86,7 +102,7 @@ CREATE TABLE IF NOT EXISTS videogame
 	end_date INT,
     franchise_name CHAR(50),
 	PRIMARY KEY (name),
-	FOREIGN KEY (developer_name) REFERENCES developer(name),
+	FOREIGN KEY (developer_name) REFERENCES developer(name) ON DELETE SET NULL,
 	FOREIGN KEY (franchise_name) REFERENCES franchise(name)
 );
 
@@ -97,7 +113,7 @@ CREATE TABLE IF NOT EXISTS videogamehascharacter
 	actor_id INT,
 	character_role CHAR(20) NOT NULL,
 	PRIMARY KEY (game_name, character_name),
-	FOREIGN KEY (game_name) REFERENCES videogame(name),
+	FOREIGN KEY (game_name) REFERENCES videogame(name) ON DELETE CASCADE,
 	FOREIGN KEY (character_name) REFERENCES characters(name),
 	FOREIGN KEY (actor_id) REFERENCES voiceactor(actor_id)
 );
@@ -120,7 +136,7 @@ CREATE TABLE IF NOT EXISTS posttagsvideogame
 	game_name CHAR(50),
 	PRIMARY KEY(post_id, game_name),
 	FOREIGN KEY(post_id) REFERENCES post(post_id),
-	FOREIGN KEY(game_name) REFERENCES videogame(name)
+	FOREIGN KEY(game_name) REFERENCES videogame(name) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS comment
