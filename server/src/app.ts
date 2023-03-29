@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 // dispatch requests to routes
 app.use('/videogame', videogameRoutes);
 app.use('/voiceactor', voiceActorRoutes);
-app.use(franchiseRoutes)
+app.use('/franchise', franchiseRoutes)
 // ... TODO: more routes
 
 export default app;

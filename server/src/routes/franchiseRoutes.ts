@@ -4,7 +4,7 @@ import {getFranchiseNames, getCharactersFromFranchise} from "../controllers/Fran
 const router = Router();
 
 
-router.get("/franchises/names", getFranchiseNames);
-router.get("/franchises/:franchiseName/characters", getCharactersFromFranchise)
+router.get("/names", getFranchiseNames);
+router.get("/:franchiseName/characters", getCharactersFromFranchise)
 
 export default router;
