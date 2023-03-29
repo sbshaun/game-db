@@ -1,14 +1,12 @@
 <script setup lang="ts">
   import {ref} from "vue";
-  import {Franchise} from "~/types/types";
-  import {fetchFranchiseProjection} from "~/api/FranchiseAPI";
+  import {Franchise, Character} from "~/types/types";
+  import {fetchCharactersInEntireFranchise, fetchFranchiseProjection} from "~/api/FranchiseAPI";
 
-  const franchises = ref([] as Franchise[]);
-  const franchise_names = ref<string[]>(await fetchFranchiseNames());
-  const columns = ref(["name", "description"]);
+  const franchises = ref<Franchise[]>([]);
+  const franchiseNames = ref<string[]>(await fetchFranchiseNames());
+  const franchiseColumns = ref(["name", "description"]);
   const selectedColumns = ref<string[]>([]);
-
-  const fetched = ref(false);
 
   async function fetchFranchiseNames(): Promise<string[]> {
     const res = await fetchFranchiseProjection(["name"])
@@ -21,10 +19,17 @@
     } else {
       franchises.value = [];
     }
-    console.log(franchises.value);
-    fetched.value = true;
   }
 
+  const characters = ref<Character[]>([]);
+  const characterColumns = ref<string[]>(["name", "description", "history"])
+  const selectedDropdown = ref<string>("Select Franchise");
+
+  async function fetchCharactersInAll() {
+    if (selectedDropdown.value !== "Select Franchise") {
+      characters.value = await fetchCharactersInEntireFranchise(selectedDropdown.value)
+    }
+  }
 
 </script>
 
@@ -33,7 +38,7 @@
     <h1>Franchises</h1>
     <div class="projection-row">
       <div class="column-select">
-        <label v-for="column in columns" :key="column"> {{ column }}
+        <label v-for="column in franchiseColumns" :key="column"> {{ column }}
           <input
               type="checkbox"
               :value="column"
@@ -56,9 +61,25 @@
         </tr>
       </tbody>
     </table>
-<!--    <h3>Characters In All</h3>-->
-<!--    <div class="franchise-dropdown">-->
-<!--    </div>-->
+    <h3>Characters In All</h3>
+    <div class="charactersAll">
+      <select class="dropdown-menu" v-model="selectedDropdown" @change="fetchCharactersInAll">
+        <option selected="selected">Select Franchise</option>
+        <option v-for="name in franchiseNames" :key="name"> {{ name }} </option>
+      </select>
+      <table>
+        <thead>
+          <th v-for="column in characterColumns" :key="column">{{ column }}</th>
+        </thead>
+        <tbody>
+        <tr v-for="character in characters" :key = "character.name">
+          <td>{{ character.name }}</td>
+          <td>{{ character.description }}</td>
+          <td>{{ character.history }}</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -79,6 +100,10 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
+}
+
+.dropdown-menu {
+  text-align: left;
 }
 
 .select-buttons {
