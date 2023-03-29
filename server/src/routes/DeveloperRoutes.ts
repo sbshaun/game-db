@@ -1,7 +1,5 @@
 import {Router} from 'express';
 import {
-	getDeveloper,
-	getDeveloperNames,
 	getIndividualDeveloper,
 	getIndividualDeveloperNames,
 	getStudio,
@@ -9,9 +7,6 @@ import {
 } from "../controllers/DeveloperController";
 
 const router = Router();
-
-router.get("/developers", getDeveloperNames);
-router.get("/developers/:name", getDeveloper);
 
 router.get("/studios", getStudioNames);
 router.get("/studios/:name", getStudio);

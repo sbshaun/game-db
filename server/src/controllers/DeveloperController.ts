@@ -9,13 +9,6 @@ const callback = (res: Response, err: { message: unknown }, results: unknown[]) 
 	}
 };
 
-export const getDeveloperNames = (req: Request, res: Response) => {
-	connection.query(
-		`SELECT name FROM developer`,
-		(err: { message: unknown }, results: unknown[]) => callback(res, err, results)
-	);
-}
-
 export const getStudioNames = (req: Request, res: Response) => {
 	connection.query(
 		`SELECT name FROM studio`,
@@ -29,14 +22,6 @@ export const getIndividualDeveloperNames = (req: Request, res: Response) => {
 		(err: { message: unknown }, results: unknown[]) => callback(res, err, results)
 	);
 }
-
-export const getDeveloper = (req: Request, res: Response) => {
-	const name: string = req.params.name;
-	connection.query(
-		`SELECT * FROM developer WHERE name = '${name}'`,
-		(err: { message: unknown }, results: unknown[]) => callback(res, err, results)
-	);
-};
 
 export const getStudio = (req: Request, res: Response) => {
 	const name: string = req.params.name;
