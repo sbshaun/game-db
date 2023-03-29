@@ -5,6 +5,10 @@ import videogameRoutes from './routes/videogameRoutes';
 import voiceActorRoutes from './routes/voiceActorRoutes';
 import franchiseRoutes from "./routes/franchiseRoutes";
 
+import developerRoutes from './routes/DeveloperRoutes';
+import characterRoutes from './routes/CharacterRoutes';
+import projectionRoutes from './routes/projectionRoutes';
+
 const app: Express = express();
 app.use(
 	cors({
@@ -19,9 +23,12 @@ app.get('/', (req, res) => {
 });
 
 // dispatch requests to routes
+app.use('/projections', projectionRoutes);
 app.use('/videogame', videogameRoutes);
 app.use('/voiceactor', voiceActorRoutes);
 app.use('/franchise', franchiseRoutes)
+app.use('', developerRoutes);
+app.use('', characterRoutes);
 // ... TODO: more routes
 
 export default app;
