@@ -1,13 +1,12 @@
-import {Character, Franchise} from "~/types/types";
+import {Character} from "~/types/types";
 import axios from "axios";
 
 const server_port = import.meta.env.VITE_SERVER_URL || 'http://localhost:4000';
 
-export async function fetchFranchiseProjection(selectedFields: string[]): Promise<Franchise[]> {
+export async function fetchFranchiseNames(): Promise<string[]> {
     try {
-        console.log(selectedFields)
-        const response = await axios.post(`${server_port}/franchises`, selectedFields);
-        return response.data as Franchise[];
+        const response = await axios.get(`${server_port}/franchises/names`);
+        return response.data as string[];
     } catch (e) {
         console.error(e.message);
         return [];

@@ -1,10 +1,10 @@
 import { Router } from 'express';
-import {getAllFranchises, getCharactersFromFranchise} from "../controllers/FranchiseController";
+import {getFranchiseNames, getCharactersFromFranchise} from "../controllers/FranchiseController";
 
 const router = Router();
 
 
-router.post("/franchises", getAllFranchises);
+router.get("/franchises/names", getFranchiseNames);
 router.get("/franchises/:franchiseName/characters", getCharactersFromFranchise)
 
 export default router;

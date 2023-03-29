@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import {ref} from "vue";
 import {Character} from "~/types/types";
-import {fetchCharactersInEntireFranchise, fetchFranchiseProjection} from "~/api/FranchiseAPI";
+import {fetchCharactersInEntireFranchise, fetchFranchiseNames} from "~/api/FranchiseAPI";
 
 const franchiseNames = ref<string[]>(await fetchFranchiseNames());
 const characters = ref<Character[]>([]);
 const characterColumns = ref<string[]>(["name", "description", "history"])
 const selectedDropdown = ref<string>("Select Franchise");
-
-  async function fetchFranchiseNames(): Promise<string[]> {
-    const res = await fetchFranchiseProjection(["name"])
-    return res.map((franchise) => franchise.name);
-  }
 
   async function fetchCharactersInAll() {
     if (selectedDropdown.value !== "Select Franchise") {
