@@ -6,7 +6,7 @@ import {
 	updateVideoGameByName,
 	deleteVideoGameByName,
 	fetchFilteredVideogames,
-} from '~/api/videoGameAPI';
+} from '~~/api/videogameAPI';
 
 const selectedVideoGame = reactive({
 	name: '',
@@ -22,10 +22,12 @@ const selectedVideoGame = reactive({
 const videoGames = ref([] as VideoGame[]);
 const formVisible = ref(false);
 const formMode = ref('add');
+const ratingFilter = ref('');
 
 async function addVideoGame() {
 	const newVideoGame = await insertVideoGame(selectedVideoGame as VideoGame);
 	if (newVideoGame) {
+		console.log(newVideoGame);
 		videoGames.value.push(newVideoGame);
 	}
 }
@@ -98,7 +100,10 @@ const fetched = ref(false);
 
 async function fetchFilteredColumns() {
 	if (selectedColumns.value.length > 0) {
-		videoGames.value = await fetchFilteredVideogames(selectedColumns.value);
+		videoGames.value = await fetchFilteredVideogames(
+			selectedColumns.value,
+			ratingFilter.value
+		);
 	} else {
 		videoGames.value = [];
 	}
@@ -133,6 +138,15 @@ function unselectAllColumns() {
 			<div class="fetch-buttons">
 				<button @click="selectAllColumns">Select All</button>
 				<button @click="unselectAllColumns">Unselect All</button>
+				<div v-if="selectedColumns.includes('rating')" class="rating-filter">
+					<button @click="fetchFilteredColumns">Select Rating</button
+					><input
+						type="text"
+						id="ratingFilter"
+						v-model="ratingFilter"
+						placeholder="Rating"
+					/>
+				</div>
 				<button @click="fetchFilteredColumns">Fetch Video Games</button>
 			</div>
 		</div>
@@ -204,6 +218,7 @@ function unselectAllColumns() {
 				Cancel
 			</button>
 		</form>
+
 		<table>
 			<thead>
 				<tr>
@@ -273,15 +288,14 @@ function unselectAllColumns() {
 	width: 100%;
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: flex-start;
 	flex-wrap: wrap;
-	gap: 1rem;
 }
 
 .fetch-buttons {
 	display: flex;
 	flex-direction: column;
-	gap: 0.7rem;
+	align-items: flex-start;
 }
 
 .column-select {
@@ -309,6 +323,17 @@ input,
 textarea {
 	width: 100%;
 	padding: 0.5rem;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+}
+
+.rating-filter button {
+	margin-right: 10px;
+}
+
+.rating-filter input {
+	width: 100px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-sizing: border-box;

@@ -5,30 +5,47 @@ import { ResultSetHeader } from 'mysql2';
 
 export const getAllVideogames = (req: Request, res: Response) => {
 	let selectedColumns = req.query.selectedColumns as string[];
-	// if no select, select all by default
+	const ratingFilter = req.query.ratingFilter as string;
+
+	const allowedColumns = [
+		'name',
+		'release_date',
+		'genre',
+		'synopsis',
+		'rating',
+		'sales',
+		'developer_name',
+		'start_date',
+		'end_date',
+		'franchise_name',
+	];
+
 	if (!selectedColumns || !selectedColumns.length) {
 		res.status(200).json([]);
 	}
 
-	const formattedColumns = selectedColumns.map(column => {
-		return column === 'release_date'
-			? `DATE_FORMAT(release_date, '%Y-%m-%d') AS release_date`
-			: column;
-	});
+	const sanitizedColumns = selectedColumns
+		.filter(column => allowedColumns.includes(column))
+		.map(column =>
+			column === 'release_date'
+				? `DATE_FORMAT(release_date, '%Y-%m-%d') AS release_date`
+				: column
+		);
 
-	const query = `SELECT ${formattedColumns.join(', ')} FROM videogame`;
+	let query = `SELECT ${sanitizedColumns.join(', ')} FROM videogame`;
+
+	if (ratingFilter) {
+		query += ' WHERE rating = ?';
+	}
 
 	try {
-		connection.query(
-			query,
-			function (err: { message: any }, results: VideoGame[], fields: any) {
-				if (err) {
-					res.status(500).json({ error: err.message });
-				} else {
-					res.status(200).json(results);
-				}
+		connection.query(query, [ratingFilter], function (err, results, fields) {
+			if (err) {
+				res.status(500).json({ error: err.message });
+			} else {
+				res.status(200).json(results);
 			}
-		);
+		});
 	} catch (err: any) {
 		res.status(500).json({ error: err.message });
 	}
@@ -60,6 +77,40 @@ export const createVideogame = async (req: Request, res: Response) => {
 	if (game.franchise_name === '') game.franchise_name = null;
 
 	try {
+		const [isGameExists]: any = connection.query<ResultSetHeader>(
+			'SELECT name FROM videogame WHERE name = ?',
+			[game.name]
+		);
+		if (isGameExists.length) {
+			return res
+				.status(400)
+				.json({ error: 'Videogame with this name already exists' });
+		}
+
+		if (game.developer_name) {
+			const [isDeveloperExists]: any = connection.query<ResultSetHeader>(
+				'SELECT name FROM developer WHERE name = ?',
+				[game.developer_name]
+			);
+			if (!isDeveloperExists.length) {
+				return res
+					.status(400)
+					.json({ error: 'Invalid developer_name foreign key' });
+			}
+		}
+
+		if (game.franchise_name) {
+			const [isFranchiseExists]: any = connection.query<ResultSetHeader>(
+				'SELECT name FROM franchise WHERE name = ?',
+				[game.franchise_name]
+			);
+			if (!isFranchiseExists.length) {
+				return res
+					.status(400)
+					.json({ error: 'Invalid franchise_name foreign key' });
+			}
+		}
+
 		const [result]: any = connection.query<ResultSetHeader>(
 			'INSERT INTO videogame SET ?',
 			game
@@ -89,6 +140,30 @@ export const updateVideogame = async (req: Request, res: Response) => {
 	if (game.franchise_name === '') game.franchise_name = null;
 
 	try {
+		if (game.developer_name) {
+			const [isDeveloperExists]: any = connection.query<ResultSetHeader>(
+				'SELECT name FROM developer WHERE name = ?',
+				[game.developer_name]
+			);
+			if (!isDeveloperExists.length) {
+				return res
+					.status(400)
+					.json({ error: 'Invalid developer_name foreign key' });
+			}
+		}
+
+		if (game.franchise_name) {
+			const [isFranchiseExists]: any = connection.query<ResultSetHeader>(
+				'SELECT name FROM franchise WHERE name = ?',
+				[game.franchise_name]
+			);
+			if (!isFranchiseExists.length) {
+				return res
+					.status(400)
+					.json({ error: 'Invalid franchise_name foreign key' });
+			}
+		}
+
 		connection.query<ResultSetHeader>('UPDATE videogame SET ? WHERE name = ?', [
 			game,
 			name,
@@ -105,7 +180,10 @@ export const updateVideogame = async (req: Request, res: Response) => {
 			}
 		);
 	} catch (err: any) {
-		res.status(500).json({ error: err.message });
+		res.status(500).json({
+			error:
+				'test erorrtest erorrtest erorrtest erorrtest erorrtest erorrtest erorr',
+		});
 	}
 };
 

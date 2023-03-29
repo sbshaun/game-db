@@ -26,11 +26,12 @@ export async function fetchVideoGameById(
 }
 
 export async function fetchFilteredVideogames(
-	selectedColumns: string[]
+	selectedColumns: string[],
+	ratingFilter?: string
 ): Promise<VideoGame[]> {
 	try {
 		const response = await axios.get(`${server_port}/videogame`, {
-			params: { selectedColumns },
+			params: { selectedColumns, ratingFilter },
 		});
 		return response.data.map(parseVideoGame);
 	} catch (error) {
