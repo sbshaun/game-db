@@ -24,6 +24,9 @@ const selectTab = (tabName: string) => {
 			<nuxt-link to="/stats" @click="selectTab('stats')">
 				<li :class="{ active: currentTab === 'stats' }">Stats</li>
 			</nuxt-link>
+			<nuxt-link to="/projections" @click="selectTab('projections')">
+				<li :class="{ active: currentTab === 'projections' }">Projections</li>
+			</nuxt-link>
 		</ul>
 	</nav>
 </template>
