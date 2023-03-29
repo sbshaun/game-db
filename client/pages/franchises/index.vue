@@ -1,33 +1,23 @@
 <script setup lang="ts">
-  import {ref} from "vue";
-  import {Franchise, Character} from "~/types/types";
-  import {fetchCharactersInEntireFranchise, fetchFranchiseProjection} from "~/api/FranchiseAPI";
+import {ref} from "vue";
+import {Character} from "~/types/types";
+import {fetchCharactersInEntireFranchise, fetchFranchiseProjection} from "~/api/FranchiseAPI";
 
-  const franchises = ref<Franchise[]>([]);
-  const franchiseNames = ref<string[]>(await fetchFranchiseNames());
-  const franchiseColumns = ref(["name", "description"]);
-  const selectedColumns = ref<string[]>([]);
+const franchiseNames = ref<string[]>(await fetchFranchiseNames());
+const characters = ref<Character[]>([]);
+const characterColumns = ref<string[]>(["name", "description", "history"])
+const selectedDropdown = ref<string>("Select Franchise");
 
   async function fetchFranchiseNames(): Promise<string[]> {
     const res = await fetchFranchiseProjection(["name"])
     return res.map((franchise) => franchise.name);
   }
 
-  async function fetchSelectedColumns() {
-    if (selectedColumns.value.length > 0) {
-      franchises.value = await fetchFranchiseProjection(selectedColumns.value);
-    } else {
-      franchises.value = [];
-    }
-  }
-
-  const characters = ref<Character[]>([]);
-  const characterColumns = ref<string[]>(["name", "description", "history"])
-  const selectedDropdown = ref<string>("Select Franchise");
-
   async function fetchCharactersInAll() {
     if (selectedDropdown.value !== "Select Franchise") {
       characters.value = await fetchCharactersInEntireFranchise(selectedDropdown.value)
+    } else {
+      characters.value = [];
     }
   }
 
@@ -36,31 +26,6 @@
 <template>
 	<div class="franchisesContainer">
     <h1>Franchises</h1>
-    <div class="projection-row">
-      <div class="column-select">
-        <label v-for="column in franchiseColumns" :key="column"> {{ column }}
-          <input
-              type="checkbox"
-              :value="column"
-              v-model="selectedColumns"
-          />
-        </label>
-      </div>
-      <div class="select-buttons">
-        <button @click="fetchSelectedColumns">Fetch Franchises</button>
-      </div>
-    </div>
-    <table>
-      <thead>
-        <th v-for="column in selectedColumns" :key="column">{{ column }}</th>
-      </thead>
-      <tbody>
-        <tr v-for="franchise in franchises" :key = "franchise.name">
-          <td v-if="selectedColumns.includes('name')">{{ franchise.name }}</td>
-          <td v-if="selectedColumns.includes('description')">{{ franchise.description }}</td>
-        </tr>
-      </tbody>
-    </table>
     <h3>Characters In All</h3>
     <div class="charactersAll">
       <select class="dropdown-menu" v-model="selectedDropdown" @change="fetchCharactersInAll">
@@ -80,6 +45,9 @@
         </tbody>
       </table>
     </div>
+    <div v-if="selectedDropdown !== 'Select Franchise' && characters.length === 0" class="no-characters">
+      <strong>Sadly, there was no characters that could be found（＞人＜；)</strong>
+    </div>
   </div>
 </template>
 
@@ -93,23 +61,8 @@
   box-sizing: border-box;
 }
 
-.projection-row {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-
 .dropdown-menu {
   text-align: left;
-}
-
-.select-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 0.7rem;
 }
 
 h1 {
@@ -118,26 +71,7 @@ h1 {
 
 h3 {
   text-align: center;
-  padding-top: 50px;
-}
-
-input {
-  width: 100%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  box-sizing: border-box;
-}
-
-.column-select {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-bottom: 1rem;
-}
-
-.column-select label {
-  cursor: pointer;
+  padding-top: 25px;
 }
 
 table {
@@ -158,6 +92,31 @@ th, td {
 th {
   font-weight: bold;
   color: #2c3e50;
+}
+
+select {
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: #fff;
+  font-weight: bold;
+  border-radius: 4px;
+  transition: background-color 0.3s;
+}
+
+.no-characters {
+  padding: 15px;
+  margin-left: -10%;
+  width: 100%;
+  background-color: #2596be;
+  color: white;
+  margin-bottom: 15px;
+  align-self: flex-start;
+}
+
+strong {
+  font-weight: bold;
 }
 
 </style>
