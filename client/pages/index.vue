@@ -16,6 +16,8 @@ const selectedVideoGame = reactive({
 	rating: '',
 	sales: 0,
 	developer_name: '',
+	start_date: 0,
+	end_date: 0,
 	franchise_name: '',
 });
 
@@ -27,13 +29,14 @@ const ratingFilter = ref('');
 async function addVideoGame() {
 	const newVideoGame = await insertVideoGame(selectedVideoGame as VideoGame);
 	if (newVideoGame) {
-		console.log(newVideoGame);
-		videoGames.value.push(newVideoGame);
+		alert(`successfully added ${newVideoGame.name}`);
+		videoGames.value.unshift(newVideoGame);
 	}
 }
 async function deleteVideoGame(game_name: string) {
 	const { success, message } = await deleteVideoGameByName(game_name);
 	if (success) {
+		alert(`successfully deleted ${game_name}!`);
 		videoGames.value = videoGames.value.filter(vg => vg.name !== game_name);
 	} else {
 		alert(`Error: ${message}`);
@@ -71,16 +74,9 @@ function showEditForm(videoGame: VideoGame) {
 	formVisible.value = true;
 	Object.assign(selectedVideoGame, videoGame);
 }
+
 async function cancelEdit() {
 	formVisible.value = false;
-	selectedVideoGame.name = '';
-	selectedVideoGame.release_date = '';
-	selectedVideoGame.genre = '';
-	selectedVideoGame.synopsis = '';
-	selectedVideoGame.rating = '';
-	selectedVideoGame.sales = 0;
-	selectedVideoGame.developer_name = '';
-	selectedVideoGame.franchise_name = '';
 }
 
 const selectedColumns = ref<string[]>([]);
@@ -93,6 +89,8 @@ const columns = ref([
 	'rating',
 	'sales',
 	'developer_name',
+	'start_date',
+	'end_date',
 	'franchise_name',
 ]);
 
@@ -139,12 +137,11 @@ function unselectAllColumns() {
 				<button @click="selectAllColumns">Select All</button>
 				<button @click="unselectAllColumns">Unselect All</button>
 				<div v-if="selectedColumns.includes('rating')" class="rating-filter">
-					<button @click="fetchFilteredColumns">Select Rating</button
-					><input
+					<input
 						type="text"
 						id="ratingFilter"
 						v-model="ratingFilter"
-						placeholder="Rating"
+						placeholder="Filter by rating"
 					/>
 				</div>
 				<button @click="fetchFilteredColumns">Fetch Video Games</button>
@@ -159,6 +156,15 @@ function unselectAllColumns() {
 				v-if="!formVisible"
 			>
 				Add Video Game
+			</button>
+
+			<button
+				v-if="formVisible"
+				type="button"
+				@click="cancelEdit"
+				class="cancel-button"
+			>
+				Cancel
 			</button>
 		</div>
 		<form @submit.prevent="submitForm" v-if="formVisible">
@@ -204,6 +210,18 @@ function unselectAllColumns() {
 				/>
 			</div>
 			<div class="inputField">
+				<label for="developer_name">Start date:</label>
+				<input
+					type="text"
+					id="start_date"
+					v-model="selectedVideoGame.start_date"
+				/>
+			</div>
+			<div class="inputField">
+				<label for="developer_name">End date:</label>
+				<input type="text" id="end_date" v-model="selectedVideoGame.end_date" />
+			</div>
+			<div class="inputField">
 				<label for="franchise_name">Franchise Name:</label>
 				<input
 					type="text"
@@ -212,10 +230,7 @@ function unselectAllColumns() {
 				/>
 			</div>
 			<button type="submit">
-				{{ formMode === 'add' ? 'Add Video Game' : 'Submit' }}
-			</button>
-			<button type="button" @click="cancelEdit" class="cancel-button">
-				Cancel
+				{{ formMode === 'add' ? 'Add' : 'Submit' }}
 			</button>
 		</form>
 
@@ -249,6 +264,12 @@ function unselectAllColumns() {
 					</td>
 					<td v-if="selectedColumns.includes('developer_name')">
 						{{ videoGame.developer_name }}
+					</td>
+					<td v-if="selectedColumns.includes('start_date')">
+						{{ videoGame.start_date }}
+					</td>
+					<td v-if="selectedColumns.includes('end_date')">
+						{{ videoGame.end_date }}
 					</td>
 					<td v-if="selectedColumns.includes('franchise_name')">
 						{{ videoGame.franchise_name }}
@@ -294,8 +315,9 @@ function unselectAllColumns() {
 
 .fetch-buttons {
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 	align-items: flex-start;
+	gap: 0.5rem;
 }
 
 .column-select {
@@ -328,15 +350,12 @@ textarea {
 	box-sizing: border-box;
 }
 
-.rating-filter button {
-	margin-right: 10px;
-}
-
 .rating-filter input {
-	width: 100px;
+	width: 150px;
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-sizing: border-box;
+	margin-bottom: 10px;
 }
 
 button {
@@ -359,9 +378,14 @@ button:hover {
 	background-color: #0056b3;
 }
 
+.add-button {
+	width: 150px;
+}
+
 .cancel-button {
 	background-color: #e26262;
 	color: #fff;
+	width: 138px;
 }
 
 .cancel-button:hover {

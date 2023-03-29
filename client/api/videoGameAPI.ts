@@ -45,7 +45,7 @@ export async function insertVideoGame(
 ): Promise<VideoGame | null> {
 	try {
 		const response = await axios.post(`${server_port}/videogame/`, videoGame);
-		return parseVideoGame(response.data);
+		return parseVideoGame(response.data.game);
 	} catch (error) {
 		console.error(error);
 		return null;
