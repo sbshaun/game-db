@@ -15,7 +15,6 @@ export async function fetchFranchiseNames(): Promise<string[]> {
 
 export async function fetchCharactersInEntireFranchise(franchiseName: string): Promise<Character[]> {
     try {
-        console.log(franchiseName);
         const response = await axios.get(`${server_port}/franchise/${franchiseName}/characters`)
         return response.data as Character[];
     } catch (e) {
