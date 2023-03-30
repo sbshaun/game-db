@@ -132,18 +132,19 @@ function unselectAllColumns() {
 						ref="checkboxes"
 					/>
 				</label>
-			</div>
-			<div class="fetch-buttons">
-				<button @click="selectAllColumns">Select All</button>
-				<button @click="unselectAllColumns">Unselect All</button>
 				<div v-if="selectedColumns.includes('rating')" class="rating-filter">
 					<input
+						v-if="selectedColumns.includes('rating')"
 						type="text"
 						id="ratingFilter"
 						v-model="ratingFilter"
 						placeholder="Filter by rating"
 					/>
 				</div>
+			</div>
+			<div class="fetch-buttons">
+				<button @click="selectAllColumns">Select All</button>
+				<button @click="unselectAllColumns">Unselect All</button>
 				<button @click="fetchFilteredColumns">Fetch Video Games</button>
 			</div>
 		</div>
@@ -168,66 +169,79 @@ function unselectAllColumns() {
 			</button>
 		</div>
 		<form @submit.prevent="submitForm" v-if="formVisible">
-			<div class="inputField">
-				<label for="name">Name:</label>
-				<input
-					type="text"
-					id="name"
-					v-model="selectedVideoGame.name"
-					required
-				/>
-			</div>
-			<div class="inputField">
-				<label for="release_date">Release Date:</label>
-				<input
-					type="date"
-					id="release_date"
-					v-model="selectedVideoGame.release_date"
-				/>
-			</div>
-			<div class="inputField">
-				<label for="genre">Genre:</label>
-				<input type="text" id="genre" v-model="selectedVideoGame.genre" />
-			</div>
-			<div class="inputField">
-				<label for="synopsis">Synopsis:</label>
-				<textarea id="synopsis" v-model="selectedVideoGame.synopsis"></textarea>
-			</div>
-			<div class="inputField">
-				<label for="rating">Rating:</label>
-				<input type="text" id="rating" v-model="selectedVideoGame.rating" />
-			</div>
-			<div class="inputField">
-				<label for="sales">Sales:</label>
-				<input type="number" id="sales" v-model="selectedVideoGame.sales" />
-			</div>
-			<div class="inputField">
-				<label for="developer_name">Developer Name:</label>
-				<input
-					type="text"
-					id="developer_name"
-					v-model="selectedVideoGame.developer_name"
-				/>
-			</div>
-			<div class="inputField">
-				<label for="developer_name">Start date:</label>
-				<input
-					type="text"
-					id="start_date"
-					v-model="selectedVideoGame.start_date"
-				/>
-			</div>
-			<div class="inputField">
-				<label for="developer_name">End date:</label>
-				<input type="text" id="end_date" v-model="selectedVideoGame.end_date" />
-			</div>
-			<div class="inputField">
-				<label for="franchise_name">Franchise Name:</label>
-				<input
-					type="text"
-					id="franchise_name"
-					v-model="selectedVideoGame.franchise_name"
-				/>
+			<div class="formWrapper">
+				<div class="leftHalf">
+					<div class="inputField">
+						<label for="name">Name:</label>
+						<input
+							type="text"
+							id="name"
+							v-model="selectedVideoGame.name"
+							required
+						/>
+					</div>
+					<div class="inputField">
+						<label for="release_date">Release Date:</label>
+						<input
+							type="date"
+							id="release_date"
+							v-model="selectedVideoGame.release_date"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="genre">Genre:</label>
+						<input type="text" id="genre" v-model="selectedVideoGame.genre" />
+					</div>
+					<div class="inputField">
+						<label for="synopsis">Synopsis:</label>
+						<textarea
+							id="synopsis"
+							v-model="selectedVideoGame.synopsis"
+						></textarea>
+					</div>
+					<div class="inputField">
+						<label for="rating">Rating:</label>
+						<input type="text" id="rating" v-model="selectedVideoGame.rating" />
+					</div>
+				</div>
+				<div class="rightHalf">
+					<div class="inputField">
+						<label for="sales">Sales:</label>
+						<input type="number" id="sales" v-model="selectedVideoGame.sales" />
+					</div>
+					<div class="inputField">
+						<label for="developer_name">Developer Name:</label>
+						<input
+							type="text"
+							id="developer_name"
+							v-model="selectedVideoGame.developer_name"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="developer_name">Start date:</label>
+						<input
+							type="text"
+							id="start_date"
+							v-model="selectedVideoGame.start_date"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="developer_name">End date:</label>
+						<input
+							type="text"
+							id="end_date"
+							v-model="selectedVideoGame.end_date"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="franchise_name">Franchise Name:</label>
+						<input
+							type="text"
+							id="franchise_name"
+							v-model="selectedVideoGame.franchise_name"
+						/>
+					</div>
+				</div>
 			</div>
 			<button type="submit">
 				{{ formMode === 'add' ? 'Add' : 'Submit' }}
@@ -308,6 +322,7 @@ function unselectAllColumns() {
 .fetch-row {
 	width: 100%;
 	display: flex;
+	flex-direction: row;
 	align-items: center;
 	justify-content: flex-start;
 	flex-wrap: wrap;
@@ -315,13 +330,14 @@ function unselectAllColumns() {
 
 .fetch-buttons {
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 	align-items: flex-start;
-	gap: 0.5rem;
+	/* gap: 0.5rem; */
 }
 
 .column-select {
 	display: flex;
+	width: 80%;
 	flex-wrap: wrap;
 	gap: 0.5rem;
 	margin-bottom: 1rem;
@@ -341,6 +357,25 @@ form {
 	flex-direction: column;
 }
 
+.formWrapper {
+	display: flex;
+	flex-direction: row;
+	gap: 3rem;
+	font-size: smaller;
+}
+
+.leftHalf {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.rightHalf {
+	width: 50%;
+	height: 100%;
+}
+
 input,
 textarea {
 	width: 100%;
@@ -355,7 +390,7 @@ textarea {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-sizing: border-box;
-	margin-bottom: 10px;
+	margin-bottom: 7px;
 }
 
 button {
@@ -429,7 +464,13 @@ tbody td {
 	.add-button {
 		display: flex;
 		justify-content: center;
-		margin: 1rem 0;
+		margin: 1rem auto;
+	}
+	.fetch-buttons {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 0.5rem;
 	}
 }
 
