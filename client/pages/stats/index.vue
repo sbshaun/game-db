@@ -88,9 +88,9 @@ const operators = new Map<string, string>([
     <h1>Stats</h1>
     <div class="menu">
       <ul @click="warningVisible=false; tableVisible=false;">
-        <li @click="changeMenu(Menu.MEASURE)">Measure Sales</li>
-        <li @click="changeMenu(Menu.COUNT)">Count Groups</li>
-        <li @click="changeMenu(Menu.EXTREMA)">Maximum/Minimum Sales</li>
+        <li @click="changeMenu(Menu.MEASURE)" :class="{active: currentMenu===Menu.MEASURE}">Measure Sales</li>
+        <li @click="changeMenu(Menu.COUNT)" :class="{active: currentMenu===Menu.COUNT}">Count Groups</li>
+        <li @click="changeMenu(Menu.EXTREMA)" :class="{active: currentMenu===Menu.EXTREMA}">Sales Extrema</li>
       </ul>
     </div>
 
@@ -104,7 +104,7 @@ const operators = new Map<string, string>([
         <option selected="selected">Select Measure</option>
         <option v-for="measure in measurements.keys()">{{ measure }}</option>
       </select>
-      <input type="submit" value="Query" @click="getSalesByGroup">
+      <input type="submit" class="submitbtn" value="Query" @click="getSalesByGroup">
       <table v-if="tableVisible">
         <tr>
           <th>{{ selectedGroup }}</th>
@@ -131,8 +131,8 @@ const operators = new Map<string, string>([
         <option selected="selected">Select Operator</option>
         <option v-for="op in operators.keys()">{{ op }}</option>
       </select>
-      <input type="text" v-model="countInput">
-      <input type="submit" value="Query" @click="countVideoGamesByGroup">
+      <input type="text" class="text-input" v-model="countInput">
+      <input type="submit" class="submitbtn" value="Query" @click="countVideoGamesByGroup">
       <table v-if="tableVisible">
         <tr>
           <th>{{ selectedGroup }}</th>
@@ -162,7 +162,7 @@ const operators = new Map<string, string>([
         <option>MAX</option>
         <option>MIN</option>
       </select>
-      <input type="submit" value="Query" @click="findExtremaByGroup">
+      <input class="submitbtn" type="submit" value="Query" @click="findExtremaByGroup">
       <table  v-if="tableVisible">
         <tr>
           <th>{{ selectedGroup }}</th>
@@ -192,6 +192,7 @@ const operators = new Map<string, string>([
 }
 
 .statsContainer {
+  justify-content: center;
   width: 100%;
   max-width: 1000px;
   margin: 0 auto;
@@ -228,19 +229,26 @@ th, td {
 table {
   width: 50%;
   border-collapse: collapse;
+  text-align: center;
+  margin: 0 auto;
 }
 
 .alert {
-  margin-top: 10px;
   padding: 15px;
   width: 50%;
   background-color: #f44336;
   color: white;
-  align-self: flex-start;
+  margin: 0 auto;
 }
 
 .closebtn:hover {
   color: black;
+}
+
+.aggregation-tab {
+  margin: 0 auto;
+  text-align: center;
+  padding-bottom: 10px;
 }
 
 .closebtn {
@@ -254,20 +262,68 @@ table {
   transition: 0.3s;
 }
 
+h1 {
+  text-align: center;
+}
+
+h3 {
+  margin-bottom: 10px;
+}
+
 strong {
   font-weight: bold;
 }
 
-.menu {
-  margin-bottom: 20px;
+.submitbtn {
+  border-radius: 10px;
+  padding: 7px;
+  border: none;
+  background-color: aquamarine;
+  text-align: center;
   cursor: pointer;
+  color: black;
+  font-weight: bold;
 }
 
-ul {
+.text-input {
+  width: 10%;
+  margin-right: 10px;
+  padding: 5px;
+  border-radius: 4px;
+  border: none;
+}
+
+.menu {
+  padding-top: 30px;
+  padding-bottom: 30px;
+  cursor: pointer;
+  margin: 0 auto;
+}
+
+.menu ul {
   list-style: none;
+  text-align: center;
 }
 
-li {
-  margin-bottom: 5px;
+.menu li {
+  color: white;
+  padding: 10px;
+  display: inline;
+  background-color: #2c3e50;
+  text-align: center;
 }
+
+.menu li:not(:last-child) {
+  border-right:2px solid black;
+}
+
+.menu li:hover {
+  background-color: #537596;
+}
+
+.menu li.active{
+  background-color: #537596;
+}
+
+
 </style>

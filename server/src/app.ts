@@ -8,6 +8,7 @@ import franchiseRoutes from "./routes/franchiseRoutes";
 import developerRoutes from './routes/DeveloperRoutes';
 import characterRoutes from './routes/CharacterRoutes';
 import projectionRoutes from './routes/projectionRoutes';
+import statsRoutes from "./routes/statsRoutes";
 
 const app: Express = express();
 app.use(
@@ -29,6 +30,7 @@ app.use('/voiceactor', voiceActorRoutes);
 app.use('/franchise', franchiseRoutes)
 app.use('', developerRoutes);
 app.use('', characterRoutes);
+app.use('/stats', statsRoutes);
 // ... TODO: more routes
 
 export default app;
