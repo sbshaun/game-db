@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import {ref} from "vue";
+
 const currentTab = ref('videogames');
 
 const selectTab = (tabName: string) => {
@@ -15,11 +17,8 @@ const selectTab = (tabName: string) => {
 			<nuxt-link to="/franchises" @click="selectTab('franchises')">
 				<li :class="{ active: currentTab === 'franchises' }">Franchises</li>
 			</nuxt-link>
-			<nuxt-link to="/developers" @click="selectTab('developers')">
-				<li :class="{ active: currentTab === 'developers' }">Developers</li>
-			</nuxt-link>
-			<nuxt-link to="/characters" @click="selectTab('characters')">
-				<li :class="{ active: currentTab === 'characters' }">Characters</li>
+			<nuxt-link to="/studios" @click="selectTab('studios')">
+				<li :class="{ active: currentTab === 'studios' }">Studios</li>
 			</nuxt-link>
 			<nuxt-link to="/stats" @click="selectTab('stats')">
 				<li :class="{ active: currentTab === 'stats' }">Stats</li>
