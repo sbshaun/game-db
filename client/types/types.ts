@@ -40,6 +40,23 @@ export type IndividualDeveloper = {
 	birthdate: string | null;
 };
 
+export type DeveloperStudioCountry = {
+	name: string;
+	website_link: string | null;
+	description: string | null;
+	year_established: number | null;
+	country: string | null;
+	country_code: string | null;
+	phone_number: string | null;
+}
+
+export type DeveloperIndividualDeveloper = {
+	name: string;
+	website_link: string | null;
+	description: string | null;
+	birthdate: string | null;
+}
+
 export type Character = {
 	name: string;
 	description: string | null;

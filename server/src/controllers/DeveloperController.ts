@@ -27,8 +27,9 @@ export const getStudio = (req: Request, res: Response) => {
 	const name: string = req.params.name;
 	connection.query(
 		`SELECT *
-			FROM developer D, studio S
+			FROM developer D, studio S, country C
 			WHERE D.name = S.name
+			AND S.country = C.country
 			AND D.name = '${name}'`,
 		(err: { message: unknown }, results: unknown[]) => callback(res, err, results)
 	);
