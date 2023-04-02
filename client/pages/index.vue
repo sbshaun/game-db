@@ -6,7 +6,7 @@ import {
 	updateVideoGameByName,
 	deleteVideoGameByName,
 	fetchFilteredVideogames,
-} from '~/api/videoGameAPI';
+} from '~~/api/videogameAPI';
 
 const selectedVideoGame = reactive({
 	name: '',
@@ -16,22 +16,27 @@ const selectedVideoGame = reactive({
 	rating: '',
 	sales: 0,
 	developer_name: '',
+	start_date: 0,
+	end_date: 0,
 	franchise_name: '',
 });
 
 const videoGames = ref([] as VideoGame[]);
 const formVisible = ref(false);
 const formMode = ref('add');
+const ratingFilter = ref('');
 
 async function addVideoGame() {
 	const newVideoGame = await insertVideoGame(selectedVideoGame as VideoGame);
 	if (newVideoGame) {
-		videoGames.value.push(newVideoGame);
+		alert(`successfully added ${newVideoGame.name}`);
+		videoGames.value.unshift(newVideoGame);
 	}
 }
 async function deleteVideoGame(game_name: string) {
 	const { success, message } = await deleteVideoGameByName(game_name);
 	if (success) {
+		alert(`successfully deleted ${game_name}!`);
 		videoGames.value = videoGames.value.filter(vg => vg.name !== game_name);
 	} else {
 		alert(`Error: ${message}`);
@@ -69,16 +74,9 @@ function showEditForm(videoGame: VideoGame) {
 	formVisible.value = true;
 	Object.assign(selectedVideoGame, videoGame);
 }
+
 async function cancelEdit() {
 	formVisible.value = false;
-	selectedVideoGame.name = '';
-	selectedVideoGame.release_date = '';
-	selectedVideoGame.genre = '';
-	selectedVideoGame.synopsis = '';
-	selectedVideoGame.rating = '';
-	selectedVideoGame.sales = 0;
-	selectedVideoGame.developer_name = '';
-	selectedVideoGame.franchise_name = '';
 }
 
 const selectedColumns = ref<string[]>([]);
@@ -91,6 +89,8 @@ const columns = ref([
 	'rating',
 	'sales',
 	'developer_name',
+	'start_date',
+	'end_date',
 	'franchise_name',
 ]);
 
@@ -98,7 +98,10 @@ const fetched = ref(false);
 
 async function fetchFilteredColumns() {
 	if (selectedColumns.value.length > 0) {
-		videoGames.value = await fetchFilteredVideogames(selectedColumns.value);
+		videoGames.value = await fetchFilteredVideogames(
+			selectedColumns.value,
+			ratingFilter.value
+		);
 	} else {
 		videoGames.value = [];
 	}
@@ -129,6 +132,15 @@ function unselectAllColumns() {
 						ref="checkboxes"
 					/>
 				</label>
+				<div v-if="selectedColumns.includes('rating')" class="rating-filter">
+					<input
+						v-if="selectedColumns.includes('rating')"
+						type="text"
+						id="ratingFilter"
+						v-model="ratingFilter"
+						placeholder="Filter by rating"
+					/>
+				</div>
 			</div>
 			<div class="fetch-buttons">
 				<button @click="selectAllColumns">Select All</button>
@@ -146,64 +158,96 @@ function unselectAllColumns() {
 			>
 				Add Video Game
 			</button>
-		</div>
-		<form @submit.prevent="submitForm" v-if="formVisible">
-			<div class="inputField">
-				<label for="name">Name:</label>
-				<input
-					type="text"
-					id="name"
-					v-model="selectedVideoGame.name"
-					required
-				/>
-			</div>
-			<div class="inputField">
-				<label for="release_date">Release Date:</label>
-				<input
-					type="date"
-					id="release_date"
-					v-model="selectedVideoGame.release_date"
-				/>
-			</div>
-			<div class="inputField">
-				<label for="genre">Genre:</label>
-				<input type="text" id="genre" v-model="selectedVideoGame.genre" />
-			</div>
-			<div class="inputField">
-				<label for="synopsis">Synopsis:</label>
-				<textarea id="synopsis" v-model="selectedVideoGame.synopsis"></textarea>
-			</div>
-			<div class="inputField">
-				<label for="rating">Rating:</label>
-				<input type="text" id="rating" v-model="selectedVideoGame.rating" />
-			</div>
-			<div class="inputField">
-				<label for="sales">Sales:</label>
-				<input type="number" id="sales" v-model="selectedVideoGame.sales" />
-			</div>
-			<div class="inputField">
-				<label for="developer_name">Developer Name:</label>
-				<input
-					type="text"
-					id="developer_name"
-					v-model="selectedVideoGame.developer_name"
-				/>
-			</div>
-			<div class="inputField">
-				<label for="franchise_name">Franchise Name:</label>
-				<input
-					type="text"
-					id="franchise_name"
-					v-model="selectedVideoGame.franchise_name"
-				/>
-			</div>
-			<button type="submit">
-				{{ formMode === 'add' ? 'Add Video Game' : 'Submit' }}
-			</button>
-			<button type="button" @click="cancelEdit" class="cancel-button">
+
+			<button
+				v-if="formVisible"
+				type="button"
+				@click="cancelEdit"
+				class="cancel-button"
+			>
 				Cancel
 			</button>
+		</div>
+		<form @submit.prevent="submitForm" v-if="formVisible">
+			<div class="formWrapper">
+				<div class="leftHalf">
+					<div class="inputField">
+						<label for="name">Name:</label>
+						<input
+							type="text"
+							id="name"
+							v-model="selectedVideoGame.name"
+							required
+						/>
+					</div>
+					<div class="inputField">
+						<label for="release_date">Release Date:</label>
+						<input
+							type="date"
+							id="release_date"
+							v-model="selectedVideoGame.release_date"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="genre">Genre:</label>
+						<input type="text" id="genre" v-model="selectedVideoGame.genre" />
+					</div>
+					<div class="inputField">
+						<label for="synopsis">Synopsis:</label>
+						<textarea
+							id="synopsis"
+							v-model="selectedVideoGame.synopsis"
+						></textarea>
+					</div>
+					<div class="inputField">
+						<label for="rating">Rating:</label>
+						<input type="text" id="rating" v-model="selectedVideoGame.rating" />
+					</div>
+				</div>
+				<div class="rightHalf">
+					<div class="inputField">
+						<label for="sales">Sales:</label>
+						<input type="number" id="sales" v-model="selectedVideoGame.sales" />
+					</div>
+					<div class="inputField">
+						<label for="developer_name">Developer Name:</label>
+						<input
+							type="text"
+							id="developer_name"
+							v-model="selectedVideoGame.developer_name"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="developer_name">Start date:</label>
+						<input
+							type="text"
+							id="start_date"
+							v-model="selectedVideoGame.start_date"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="developer_name">End date:</label>
+						<input
+							type="text"
+							id="end_date"
+							v-model="selectedVideoGame.end_date"
+						/>
+					</div>
+					<div class="inputField">
+						<label for="franchise_name">Franchise Name:</label>
+						<input
+							type="text"
+							id="franchise_name"
+							v-model="selectedVideoGame.franchise_name"
+						/>
+					</div>
+				</div>
+			</div>
+			<button type="submit">
+				{{ formMode === 'add' ? 'Add' : 'Submit' }}
+			</button>
 		</form>
+
 		<table>
 			<thead>
 				<tr>
@@ -234,6 +278,12 @@ function unselectAllColumns() {
 					</td>
 					<td v-if="selectedColumns.includes('developer_name')">
 						{{ videoGame.developer_name }}
+					</td>
+					<td v-if="selectedColumns.includes('start_date')">
+						{{ videoGame.start_date }}
+					</td>
+					<td v-if="selectedColumns.includes('end_date')">
+						{{ videoGame.end_date }}
 					</td>
 					<td v-if="selectedColumns.includes('franchise_name')">
 						{{ videoGame.franchise_name }}
@@ -272,20 +322,22 @@ function unselectAllColumns() {
 .fetch-row {
 	width: 100%;
 	display: flex;
+	flex-direction: row;
 	align-items: center;
-	justify-content: space-between;
+	justify-content: flex-start;
 	flex-wrap: wrap;
-	gap: 1rem;
 }
 
 .fetch-buttons {
 	display: flex;
 	flex-direction: column;
-	gap: 0.7rem;
+	align-items: flex-start;
+	/* gap: 0.5rem; */
 }
 
 .column-select {
 	display: flex;
+	width: 80%;
 	flex-wrap: wrap;
 	gap: 0.5rem;
 	margin-bottom: 1rem;
@@ -305,6 +357,25 @@ form {
 	flex-direction: column;
 }
 
+.formWrapper {
+	display: flex;
+	flex-direction: row;
+	gap: 3rem;
+	font-size: smaller;
+}
+
+.leftHalf {
+	width: 50%;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.rightHalf {
+	width: 50%;
+	height: 100%;
+}
+
 input,
 textarea {
 	width: 100%;
@@ -312,6 +383,14 @@ textarea {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	box-sizing: border-box;
+}
+
+.rating-filter input {
+	width: 150px;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
+	margin-bottom: 7px;
 }
 
 button {
@@ -334,9 +413,14 @@ button:hover {
 	background-color: #0056b3;
 }
 
+.add-button {
+	width: 150px;
+}
+
 .cancel-button {
 	background-color: #e26262;
 	color: #fff;
+	width: 138px;
 }
 
 .cancel-button:hover {
@@ -380,7 +464,13 @@ tbody td {
 	.add-button {
 		display: flex;
 		justify-content: center;
-		margin: 1rem 0;
+		margin: 1rem auto;
+	}
+	.fetch-buttons {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-start;
+		gap: 0.5rem;
 	}
 }
 

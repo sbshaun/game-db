@@ -26,11 +26,12 @@ export async function fetchVideoGameById(
 }
 
 export async function fetchFilteredVideogames(
-	selectedColumns: string[]
+	selectedColumns: string[],
+	ratingFilter?: string
 ): Promise<VideoGame[]> {
 	try {
 		const response = await axios.get(`${server_port}/videogame`, {
-			params: { selectedColumns },
+			params: { selectedColumns, ratingFilter },
 		});
 		return response.data.map(parseVideoGame);
 	} catch (error) {
@@ -44,7 +45,7 @@ export async function insertVideoGame(
 ): Promise<VideoGame | null> {
 	try {
 		const response = await axios.post(`${server_port}/videogame/`, videoGame);
-		return parseVideoGame(response.data);
+		return parseVideoGame(response.data.game);
 	} catch (error) {
 		console.error(error);
 		return null;
