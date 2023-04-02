@@ -3,8 +3,8 @@ import {countGroups, getSalesMeasurement, getSalesMeasurementExtrema} from "../c
 
 const router = Router();
 
-router.get("/stats/:group/sales/:measurement", getSalesMeasurement);
-router.post("/stats/:group/count", countGroups);
-router.get("/stats/:group/sales/:measurement/:extrema", getSalesMeasurementExtrema);
+router.get("/:group/sales/:measurement", getSalesMeasurement);
+router.post("/:group/count", countGroups);
+router.get("/:group/sales/:measurement/:extrema", getSalesMeasurementExtrema);
 
 export default router;
