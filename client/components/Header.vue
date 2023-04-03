@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {ref} from "vue";
+import { ref } from 'vue';
 
 const currentTab = ref('videogames');
 
@@ -24,7 +24,7 @@ const selectTab = (tabName: string) => {
 				<li :class="{ active: currentTab === 'stats' }">Stats</li>
 			</nuxt-link>
 			<nuxt-link to="/projections" @click="selectTab('projections')">
-				<li :class="{ active: currentTab === 'projections' }">Projections</li>
+				<li :class="{ active: currentTab === 'projections' }">All Data</li>
 			</nuxt-link>
 		</ul>
 	</nav>
