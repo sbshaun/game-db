@@ -45,17 +45,24 @@ async function deleteVideoGame(game_name: string) {
 	}
 }
 async function editVideoGame(game_name: string) {
+	const partialVideoGame: Partial<VideoGame> = {};
+	for (const key in selectedVideoGame) {
+		if (selectedVideoGame[key as keyof object] !== null) {
+			partialVideoGame[key as keyof VideoGame] =
+				selectedVideoGame[key as keyof object];
+		}
+	}
+
 	const updatedVideoGame = await updateVideoGameByName(
 		game_name,
-		selectedVideoGame
+		partialVideoGame
 	);
 	if (updatedVideoGame) {
 		const index = videoGames.value.findIndex(vg => vg.name === game_name);
 		if (index !== -1) {
 			videoGames.value[index] = updatedVideoGame;
 		}
-	} else {
-		return 'An error occurred while editing the video game.';
+		alert(`Updated ${updatedVideoGame.name}`);
 	}
 }
 
@@ -63,10 +70,7 @@ async function submitForm() {
 	if (formMode.value === 'add') {
 		await addVideoGame();
 	} else {
-		const result = await editVideoGame(selectedGame.value);
-		if (result) {
-			alert(result);
-		}
+		await editVideoGame(selectedGame.value);
 	}
 	formVisible.value = false;
 }
