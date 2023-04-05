@@ -260,34 +260,9 @@ function unselectAllColumns() {
 			</thead>
 			<tbody>
 				<tr v-for="videoGame in videoGames" :key="videoGame.name">
-					<td v-if="selectedColumns.includes('name')">{{ videoGame.name }}</td>
-					<td v-if="selectedColumns.includes('release_date')">
-						{{ videoGame.release_date }}
-					</td>
-					<td v-if="selectedColumns.includes('genre')">
-						{{ videoGame.genre }}
-					</td>
-					<td v-if="selectedColumns.includes('synopsis')">
-						{{ videoGame.synopsis }}
-					</td>
-					<td v-if="selectedColumns.includes('rating')">
-						{{ videoGame.rating }}
-					</td>
-					<td v-if="selectedColumns.includes('sales')">
-						{{ videoGame.sales }}
-					</td>
-					<td v-if="selectedColumns.includes('developer_name')">
-						{{ videoGame.developer_name }}
-					</td>
-					<td v-if="selectedColumns.includes('start_date')">
-						{{ videoGame.start_date }}
-					</td>
-					<td v-if="selectedColumns.includes('end_date')">
-						{{ videoGame.end_date }}
-					</td>
-					<td v-if="selectedColumns.includes('franchise_name')">
-						{{ videoGame.franchise_name }}
-					</td>
+					<template v-for="column in selectedColumns" :key="column">
+						<td>{{ videoGame[column as keyof VideoGame] }}</td>
+					</template>
 					<td v-if="selectedColumns.includes('name')">
 						<button @click="showEditForm(videoGame)">Edit</button>
 					</td>
