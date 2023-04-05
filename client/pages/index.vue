@@ -21,6 +21,8 @@ const selectedVideoGame = reactive({
 	franchise_name: '',
 });
 
+const selectedGame = ref('' as string);
+
 const videoGames = ref([] as VideoGame[]);
 const formVisible = ref(false);
 const formMode = ref('add');
@@ -61,7 +63,7 @@ async function submitForm() {
 	if (formMode.value === 'add') {
 		await addVideoGame();
 	} else {
-		const result = await editVideoGame(selectedVideoGame.name);
+		const result = await editVideoGame(selectedGame.value);
 		if (result) {
 			alert(result);
 		}
@@ -72,6 +74,7 @@ async function submitForm() {
 function showEditForm(videoGame: VideoGame) {
 	formMode.value = 'edit';
 	formVisible.value = true;
+	selectedGame.value = videoGame.name;
 	Object.assign(selectedVideoGame, videoGame);
 }
 

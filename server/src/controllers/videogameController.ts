@@ -161,7 +161,7 @@ export const updateVideogame = async (req: Request, res: Response) => {
 		await queryAsync('UPDATE videogame SET ? WHERE name = ?', [game, name]);
 		const updatedGame = await queryAsync(
 			`SELECT name, DATE_FORMAT(release_date, '%Y-%m-%d') as release_date, genre, synopsis, rating, sales, developer_name, start_date, end_date, franchise_name FROM videogame WHERE name = ?`,
-			[name]
+			[game.name ? game.name : name]
 		);
 		res.status(200).json(updatedGame);
 	} catch (err: any) {
