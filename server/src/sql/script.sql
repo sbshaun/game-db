@@ -17,9 +17,9 @@ DROP TABLE IF EXISTS roles;
 CREATE TABLE IF NOT EXISTS roles
 (
 	user_role CHAR(20),
-    post_permission BIT NOT NULL,
-	remove_post_permission BIT NOT NULL,
-    change_roles_permission BIT NOT NULL,
+    post_permission TINYINT NOT NULL,
+	remove_post_permission TINYINT NOT NULL,
+    change_roles_permission TINYINT NOT NULL,
 	PRIMARY KEY(user_role)
 );
 
