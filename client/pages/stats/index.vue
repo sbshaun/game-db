@@ -290,7 +290,7 @@ strong {
   margin-right: 10px;
   padding: 5px;
   border-radius: 4px;
-  border: none;
+  border: solid black 1px;
 }
 
 .menu {
