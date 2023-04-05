@@ -7,8 +7,9 @@ export async function fetchVideogames(): Promise<VideoGame[]> {
 	try {
 		const response = await axios.get(`${server_port}/videogame`);
 		return response.data.map(parseVideoGame);
-	} catch (error) {
+	} catch (error: any) {
 		console.error(error);
+		alert(error.response.data.error);
 		return [];
 	}
 }
@@ -19,8 +20,9 @@ export async function fetchVideoGameById(
 	try {
 		const response = await axios.get(`${server_port}/videogame/${id}`);
 		return parseVideoGame(response.data);
-	} catch (error) {
+	} catch (error: any) {
 		console.error(error);
+		alert(error.response.data.error);
 		return null;
 	}
 }
@@ -34,8 +36,9 @@ export async function fetchFilteredVideogames(
 			params: { selectedColumns, ratingFilter },
 		});
 		return response.data.map(parseVideoGame);
-	} catch (error) {
+	} catch (error: any) {
 		console.error(error);
+		alert(error.response.data.error);
 		return [];
 	}
 }
@@ -46,8 +49,9 @@ export async function insertVideoGame(
 	try {
 		const response = await axios.post(`${server_port}/videogame/`, videoGame);
 		return parseVideoGame(response.data.game);
-	} catch (error) {
+	} catch (error: any) {
 		console.error(error);
+		alert(error.response.data.error);
 		return null;
 	}
 }
@@ -62,8 +66,9 @@ export async function updateVideoGameByName(
 			updatedVideoGame
 		);
 		return parseVideoGame(response.data[0]);
-	} catch (error) {
+	} catch (error: any) {
 		console.error(error);
+		alert(error.response.data.error);
 		return null;
 	}
 }
